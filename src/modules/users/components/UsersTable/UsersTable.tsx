@@ -66,7 +66,6 @@ export function UsersTable<TData, TValue>({
           placeholder="Buscar por nombre..."
           value={(table.getColumn('detail')?.getFilterValue() as string) ?? ''}
           onChange={(event) => {
-            console.log('::table', table.getColumn('detail')?.getFilterValue());
             return table
               .getColumn('detail')
               ?.setFilterValue(event.target.value);
@@ -148,7 +147,7 @@ export function UsersTable<TData, TValue>({
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  <Empty/>
+                  <Empty />
                 </TableCell>
               </TableRow>
             )}

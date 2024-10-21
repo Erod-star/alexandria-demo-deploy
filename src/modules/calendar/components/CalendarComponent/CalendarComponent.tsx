@@ -85,7 +85,6 @@ export const CalendarComponent = () => {
             showMore: (total) => `+${total} más`,
           }}
           allDayMaxRows={2}
-          // popup - Preguntarle al Mike cual le agrada mas
         />
       )}
     </div>

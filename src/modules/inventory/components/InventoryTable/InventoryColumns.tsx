@@ -1,9 +1,17 @@
-import { ColumnDef } from "@tanstack/react-table";
+import { toast } from 'sonner';
+import { ColumnDef, FilterFn, Row } from '@tanstack/react-table';
 
 // ? Icons
-import { House, MoreHorizontal, Building2, ArrowUpDown } from "lucide-react";
+import {
+  House,
+  MoreHorizontal,
+  Building2,
+  ArrowUpDown,
+  MapPin,
+} from 'lucide-react';
 
 // ? Components
+import { HandleImages } from '../HandleImages';
 import {
   Badge,
   Button,
@@ -13,19 +21,55 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components";
+} from '@/components';
+
+// ? Hooks
+import { useInventoryMutations } from '../../hooks';
 
 // ? Helpers
-import { formatToMxn } from "@/helpers";
+import { formatToMxn } from '@/helpers';
 
 // ? Types
-import type { Property } from "@/modules/inventory/interfaces";
-import { HandleImages } from "../HandleImages";
+import { Inventory } from '../../types';
 
-export const inventoryColumns: ColumnDef<Property>[] = [
+const customFilterFn: FilterFn<Inventory> = (
+  row: Row<Inventory>,
+  _: string,
+  filterValue: any
+) => {
+  filterValue = filterValue.toLowerCase();
+
+  const { calleYNumero, tipoPropiedad, estado } = row.original;
+  const calleYNumeroTag = calleYNumero.toLowerCase();
+  const tipoPropiedadTag = tipoPropiedad?.toLowerCase() || '';
+  const estadoTag = estado?.toLowerCase() || '';
+
+  const filterParts = filterValue.split(' ');
+  const rowValues = `${calleYNumeroTag} ${tipoPropiedadTag} ${estadoTag}`;
+
+  return filterParts.every((partial: string) => rowValues.includes(partial));
+};
+
+const detalleFilterFn: FilterFn<Inventory> = (
+  row: Row<Inventory>,
+  _: string,
+  filterValue: any
+) => {
+  if (filterValue === null) return true;
+  const { recamaras, sanitarios } = row.original;
+  const recamarasTag = `recamaras${recamaras || 0}`;
+  const sanitariosTag = `sanitarios${sanitarios || 0}`;
+
+  const filterParts = filterValue.split(' ');
+  const rowValues = `${recamarasTag} ${sanitariosTag}`;
+
+  return filterParts.every((partial: string) => rowValues.includes(partial));
+};
+
+export const inventoryColumns: ColumnDef<Inventory>[] = [
   {
-    id: "photos",
-    accessorKey: "photos",
+    id: 'fotosUrls',
+    accessorKey: 'fotosUrls',
     header: () => (
       <div className="flex-center">
         <div className="relative">
@@ -36,176 +80,213 @@ export const inventoryColumns: ColumnDef<Property>[] = [
     ),
     cell: ({ row }) => {
       const property = row.original;
-
-      return <HandleImages images={property.photos} />;
+      // TODO: Arreglar esto una vez que se tenga la estructura correcta
+      const imgs = property.fotosUrls || '';
+      return <HandleImages images={[imgs]} />;
     },
   },
   {
-    id: "detail",
-    accessorKey: "name",
+    id: 'calleYNumero',
+    accessorKey: 'calleYNumero',
+    filterFn: customFilterFn,
     header: ({ column }) => {
       return (
         <Button
           className="text-lg"
           variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
-          Detalle de la propiedad
+          Ubicación
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },
     cell: ({ row }) => {
       const property = row.original;
+      const fullAddress = `${property.colonia}, ${property.municipio}, ${property.estado}, #${property.cp}`;
 
       return (
-        <div>
-          <p className="font-bold text-2xl mb-1">{property.name}</p>
-          <div className="text-base flex items-center gap-1  mb-3 text-alt-green-300">
-            {property.type === "Departamento" ? (
-              <Building2 className="size-4" />
-            ) : (
-              <House className="size-4" />
-            )}
-            <p> {property.type} </p>
+        <div className="max-w-[20rem]">
+          <p className="font-bold text-lg mb-1">{property.calleYNumero}</p>
+          <div className="text-base flex items-center gap-2 mb-1 text-alt-green-300">
+            <div className="px-2">
+              {property.tipoPropiedad === 'Departamento' ? (
+                <Building2 className="size-4" />
+              ) : (
+                <House className="size-4" />
+              )}
+            </div>
+            <p> {property.tipoPropiedad} </p>
           </div>
 
-          <p className="text-sm font-semibold">
-            Registrado el{" "}
-            <span className="text-alt-green-300">
-              {property.dateOfRegistration}
-            </span>
-          </p>
+          <div className="flex gap-2 text-sm font-semibold text-gray-300">
+            {property.googleMaps && (
+              <Button
+                className="px-2 py-0 h-6"
+                variant="ghost"
+                onClick={() => {
+                  navigator.clipboard.writeText(property.googleMaps!);
+                  toast('Ubicación copiada en el protapapeles', {
+                    duration: 1500,
+                  });
+                }}
+              >
+                <MapPin className="size-4" />
+              </Button>
+            )}
+
+            <Button
+              className="p-0 h-6 text-gray-300 max-w-[16rem] flex justify-start hover:text-alt-green-300"
+              variant="link"
+              onClick={() => {
+                navigator.clipboard.writeText(fullAddress);
+                toast('Dirección copiada en el portapapeles', {
+                  duration: 1500,
+                });
+              }}
+            >
+              <p className="overflow-hidden truncate">{fullAddress}</p>
+            </Button>
+          </div>
         </div>
       );
     },
   },
   {
-    id: "category",
-    accessorKey: "category",
-    header: () => <div className="text-center">Categoría</div>,
-    cell: ({ row }) => (
-      <div className="flex-center">
-        <Badge className="bg-alt-green-300 text-alt-green-900">
-          {row.getValue("category")}
-        </Badge>
-      </div>
-    ),
-  },
-  {
-    id: "availability",
-    accessorKey: "availability",
-    header: () => <div className="text-center">Estado</div>,
-    cell: ({ row }) => {
-      switch (row.original.availability) {
-        case "Disponible":
-          return (
-            <div className="flex-center font-medium">
-              <Badge className="" variant="danger">
-                {row.getValue("availability")}
-              </Badge>
-            </div>
-          );
-        case "Apartada":
-          return (
-            <div className="flex-center font-medium">
-              <Badge className="font-medium" variant="warning">
-                {row.getValue("availability")}
-              </Badge>
-            </div>
-          );
-        case "Vendida":
-          return (
-            <div className="flex-center font-medium">
-              <Badge className="font-medium" variant="success">
-                {row.getValue("availability")}
-              </Badge>
-            </div>
-          );
-        default:
-          return (
-            <div className="flex-center font-medium">
-              <Badge className="font-medium" variant="success">
-                {row.getValue("availability")}
-              </Badge>
-            </div>
-          );
-      }
-    },
-  },
-  {
-    id: "commercialValue",
-    accessorKey: "commercialValue",
-    header: () => <div className="text-center">Valor comercial</div>,
-    cell: ({ row }) => {
-      const commercialValue = parseFloat(row.getValue("commercialValue"));
-      return (
-        <div className="text-center font-medium">
-          {formatToMxn(commercialValue)}
-        </div>
-      );
-    },
-  },
-  {
-    id: "finishValue",
-    accessorKey: "finishValue",
-    header: () => <div className="text-center">Valor remate</div>,
-    cell: ({ row }) => {
-      const finishValue = parseFloat(row.getValue("finishValue"));
-      return (
-        <div className="text-center font-medium">
-          {formatToMxn(finishValue)}
-        </div>
-      );
-    },
-  },
-  {
-    id: "propertyDimensions",
-    header: () => <div className="text-center">Tamaño del terreno</div>,
+    id: 'detalle',
+    accessorKey: 'detalle',
+    filterFn: detalleFilterFn,
+    header: () => <div className="text-center">Detalle</div>,
     cell: ({ row }) => {
       const property = row.original;
-
+      const { recamaras, sanitarios, estacionamientos } = property;
       return (
-        <div className="flex-center flex-col font-medium text-sm">
-          <p>
-            Total:{" "}
-            <span className="text-alt-green-300">{property.totalSpace}</span> m²
-          </p>
-
-          <p>
-            Construido:{" "}
-            <span className="text-alt-green-300">
-              {property.totalBuildedSpace}
-            </span>{" "}
-            m²
-          </p>
+        <div className="flex-center text-sm min-w-[10rem]">
+          <ul>
+            <li>
+              Recamaras:{' '}
+              <span className="text-alt-green-300">{recamaras || '0'}</span>
+            </li>
+            <li>
+              Sanitarios:{' '}
+              <span className="text-alt-green-300">{sanitarios || '0'}</span>
+            </li>
+            <li>
+              Estacionamientos:{' '}
+              <span className="text-alt-green-300">
+                {estacionamientos || '0'}
+              </span>
+            </li>
+          </ul>
         </div>
       );
     },
   },
   {
-    id: "actions",
+    id: 'etapa',
+    accessorKey: 'etapa',
+    header: () => <div className="text-center min-w-[7rem]">Etapa</div>,
+    cell: ({ row }) => {
+      const property = row.original;
+      return (
+        <div className="flex-center">
+          <Badge className="bg-alt-green-300 text-alt-green-900">
+            {property.etapa}
+          </Badge>
+        </div>
+      );
+    },
+  },
+  {
+    id: 'lista',
+    accessorKey: 'lista',
+    header: 'Lista',
+  },
+  {
+    id: 'valorAproximado',
+    accessorKey: 'valorAproximado',
+    header: 'Valor comercial',
+    cell: ({ row }) => {
+      const property = row.original;
+      const { primerPago, segundoPago, etapa } = property;
+
+      return (
+        <div className="text-sm space-y-4">
+          <div>
+            <p>Primer pago:</p>
+            <span className="text-alt-green-300">
+              {formatToMxn(primerPago || 0)}
+            </span>
+          </div>
+
+          {etapa?.toLowerCase() !== 'classic' && (
+            <div>
+              <p>Segundo pago:</p>
+              <span className="text-alt-green-300">
+                {formatToMxn(segundoPago || 0)}
+              </span>
+            </div>
+          )}
+        </div>
+      );
+    },
+  },
+  {
+    id: 'terreno',
+    header: 'Terreno',
+    cell: ({ row }) => {
+      const property = row.original;
+      const { terreno, construccion } = property;
+
+      return (
+        <div className="text-sm space-y-4">
+          <div>
+            <p>Total:</p>
+            <span className="text-alt-green-300">{terreno}</span> m²
+          </div>
+
+          <div>
+            <p>Contruido:</p>
+            <span className="text-alt-green-300">{construccion}</span> m²
+          </div>
+        </div>
+      );
+    },
+  },
+  {
+    id: 'acciones',
     header: () => <div className="flex-center">Acciones</div>,
-    cell: () => (
-      <div className="px-2 flex-center">
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Acciones</DropdownMenuLabel>
-            <DropdownMenuItem>Publicar</DropdownMenuItem>
-            <DropdownMenuItem>Eliminar</DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuLabel>Solicitar a marketing</DropdownMenuLabel>
-            <DropdownMenuItem>Imagenes</DropdownMenuItem>
-            <DropdownMenuItem>Fichas</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
-    ),
+    cell: ({ row }) => {
+      const { deleteMutation } = useInventoryMutations();
+
+      const handleDelete = () => {
+        const { inventoryId } = row.original;
+        deleteMutation.mutateAsync(inventoryId);
+      };
+
+      return (
+        <div className="px-2 flex-center">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button className="h-8 w-8 p-0">
+                <span className="sr-only">Open menu</span>
+                <MoreHorizontal className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Acciones</DropdownMenuLabel>
+              <DropdownMenuItem>Publicar</DropdownMenuItem>
+              <DropdownMenuItem onClick={handleDelete}>
+                Eliminar
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuLabel>Solicitar a marketing</DropdownMenuLabel>
+              <DropdownMenuItem>Imagenes</DropdownMenuItem>
+              <DropdownMenuItem>Fichas</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      );
+    },
   },
 ];

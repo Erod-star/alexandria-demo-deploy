@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any*/
 const expectedVariables = [
+  'VITE_REACT_APP_API_BASE_URL',
   'VITE_REACT_APP_SUPABASE_URL',
   'VITE_REACT_APP_ANON_PUBLIC',
   'VITE_REACT_APP_GOOGLE_CLIENT_ID',

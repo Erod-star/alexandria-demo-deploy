@@ -70,6 +70,16 @@ export default {
         // * Slate
         'alt-gray-600': '#2D363B',
       },
+      keyframes: {
+        'fade-in': {
+          '0%': { opacity: 0 },
+          '100%': { opacity: 1 },
+        },
+      },
+      animation: {
+        shine: 'shine 1s',
+        'fade-in': 'fade-in 0.2s ease-in-out',
+      },
     },
   },
   plugins: [

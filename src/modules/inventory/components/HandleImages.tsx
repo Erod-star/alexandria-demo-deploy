@@ -1,11 +1,13 @@
-import { ImageOff } from "lucide-react";
+import { ImageOff } from 'lucide-react';
 
 interface HandleImagesProps {
   images: string[];
 }
+
 export const HandleImages = (props: HandleImagesProps) => {
   const { images } = props;
   const visibleImages = images.slice(1, 3);
+
   return (
     <div className="flex-center flex-col gap-2 text-black">
       <div className=" size-20 rounded-md bg-gray-400 text-xs flex-center ">
@@ -35,11 +37,10 @@ export const HandleImages = (props: HandleImagesProps) => {
               </button>
             </div>
           );
-        })}{" "}
+        })}
         {images.length > 3 ? (
           <div className="size-6 rounded-md bg-gray-400 text-xs flex-center">
-            {" "}
-            <button> + {images.length - 3}</button>{" "}
+            <button> + {images.length - 3}</button>{' '}
           </div>
         ) : (
           <></>

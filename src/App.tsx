@@ -24,6 +24,7 @@ function App() {
     }
   }, [session]);
 
+  // TODO: Hacer validacion de sacar al usuario si el provider_token no expira
   if (isLoading) return <></>;
 
   if (!session) return <AuthView />;

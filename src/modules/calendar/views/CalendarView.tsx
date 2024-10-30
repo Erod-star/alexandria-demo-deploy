@@ -1,5 +1,5 @@
+import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
-import { useSession } from '@supabase/auth-helpers-react';
 
 // ? Icons
 import { UserPlus } from 'lucide-react';
@@ -14,8 +14,12 @@ import {
 } from '@/modules/calendar/components';
 
 function CalendarView() {
-  const session = useSession();
-  const hasProviderToken = typeof session?.provider_token === 'string';
+  const [hasProviderToken, setHasProviderToken] = useState<boolean>(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem('provider-token');
+    if (token) setHasProviderToken(true);
+  }, []);
 
   return (
     <div className="flex flex-col h-full">

@@ -65,6 +65,7 @@ export const router = createBrowserRouter(
         <Route path="usuarios">
           <Route index element={<UsersView />} />
           <Route path="nuevo" element={<UsersFormView />} />
+          <Route path="editar/:id" element={<UsersFormView />} />
         </Route>
 
         <Route path="*" element={<NotFound />} />

@@ -17,9 +17,9 @@ export const useLeadsForm = () => {
       message: 'El apellido debe tener al menos 2 caracteres.',
     }),
     phone: z.string().min(10, {
-      message: 'Porfavor ingresa un número de teléfono válido.',
+      message: 'Por favor ingresa un número de teléfono válido.',
     }),
-    email: z.string().email({ message: 'Porfavor ingresa un correo válido.' }),
+    email: z.string().email({ message: 'Por favor ingresa un correo válido.' }),
     reason: z
       .string()
       .min(10, {

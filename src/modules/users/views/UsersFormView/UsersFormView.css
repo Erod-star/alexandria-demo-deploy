@@ -1,0 +1,13 @@
+.react-international-phone-input-container {
+  @apply border w-full rounded-md;
+
+  .react-international-phone-country-selector {
+    button {
+      @apply bg-alt-green-300 text-white p-2;
+    }
+  }
+
+  .react-international-phone-input {
+    @apply w-full bg-transparent text-white;
+  }
+}

@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import { ColumnDef } from '@tanstack/react-table';
 import { toast } from 'sonner';
 
@@ -15,6 +16,7 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuTrigger,
+  Separator,
 } from '@/components';
 
 import {
@@ -24,29 +26,50 @@ import {
 } from '@/modules/users/components';
 
 // ? Types
-import type { User } from '@/modules/users/interfaces';
+import type { Row, FilterFn } from '@tanstack/react-table';
+import type { User } from '@/modules/users/types';
+
+const customFilterFn: FilterFn<User> = (
+  row: Row<User>,
+  _: string,
+  filterValue: any
+) => {
+  filterValue = filterValue.toLowerCase();
+
+  const { nombre, apellido, correoPersonal, telefono } = row.original;
+  const nombreTag = nombre.toLowerCase();
+  const apellidoTag = apellido.toLowerCase();
+  const correoPersonalTag = correoPersonal.toLowerCase();
+  const telefonoTag = telefono.toLowerCase();
+
+  const filterParts = filterValue.split(' ');
+  const rowValues = `${nombreTag} ${apellidoTag} ${correoPersonalTag} ${telefonoTag}`;
+
+  return filterParts.every((partial: string) => rowValues.includes(partial));
+};
 
 export const usersColumns: ColumnDef<User>[] = [
   {
-    id: 'profilePicture',
-    accessorKey: 'profilePicture',
+    id: 'fotoDePerfil',
     header: '',
-    minSize: 5000,
     cell: ({ row }) => {
-      const { name, profilePicture } = row.original;
+      const { nombre, apellido } = row.original;
       return (
         <div className="flex-center">
           <Avatar className="size-20 border-2 border-primary shadow-sm">
-            <AvatarImage src={profilePicture} alt={name} />
-            <AvatarFallback>CN</AvatarFallback>
+            <AvatarImage src="sdfsdfds" alt={nombre} />
+            <AvatarFallback className="text-black">
+              {nombre[0] + apellido[0]}
+            </AvatarFallback>
           </Avatar>
         </div>
       );
     },
   },
   {
-    id: 'detail',
-    accessorKey: 'name',
+    id: 'detalle',
+    accessorKey: 'nombre',
+    filterFn: customFilterFn,
     header: ({ column }) => {
       return (
         <Button
@@ -60,25 +83,28 @@ export const usersColumns: ColumnDef<User>[] = [
       );
     },
     cell: ({ row }) => {
-      const { name, email } = row.original;
+      const { nombre, apellido, telefono, correoPersonal } = row.original;
+
       return (
         <>
-          <p className="font-semibold text-2xl">{name}</p>
+          <p className="font-semibold text-2xl px-2">
+            {nombre} {apellido}
+          </p>
 
-          <div className="mt-1">
+          <div>
             <Button
               className="flex items-center gap-2 mt-2 text-alt-green-300 px-2 py-0 h-6"
               size="sm"
               variant="link"
               onClick={() => {
-                navigator.clipboard.writeText(email);
+                navigator.clipboard.writeText(correoPersonal);
                 toast('Correo copiado en el portapapeles', {
                   duration: 1500,
                 });
               }}
             >
               <Mail className="size-3 inline-block" />
-              <span className="text-sm">{email}</span>
+              <span className="text-sm">{correoPersonal}</span>
             </Button>
 
             <Button
@@ -86,14 +112,14 @@ export const usersColumns: ColumnDef<User>[] = [
               size="sm"
               variant="link"
               onClick={() => {
-                navigator.clipboard.writeText('312 133 5555');
+                navigator.clipboard.writeText(telefono);
                 toast('Teléfono copiado en el portapapeles', {
                   duration: 1500,
                 });
               }}
             >
               <Phone className="size-3 inline-block" />
-              <span className="text-sm">312 133 5555</span>
+              <span className="text-sm">{telefono}</span>
             </Button>
           </div>
         </>
@@ -101,37 +127,28 @@ export const usersColumns: ColumnDef<User>[] = [
     },
   },
   {
-    accessorKey: 'department',
-    header: () => <div className="text-center"> Departamento </div>,
-    cell: ({ row }) => (
-      <div className="w-full text-center">
-        <UserDepartmentBadge department={row.getValue('department')} />
-      </div>
-    ),
+    accessorKey: 'rol',
+    header: 'Departamento',
+    cell: ({ row }) => <UserDepartmentBadge department={row.original.rol} />,
   },
   {
-    id: 'rewards',
-    header: () => <div className="flex-center">Recompensas</div>,
-    cell: () => (
-      <div className="flex-center w-full">
-        <Rewards />
-      </div>
-    ),
+    accessorKey: 'recompensas',
+    header: 'Recompensas',
+    cell: ({ row }) => <Rewards rewards={row.original.recompensas !== null} />,
   },
   {
-    id: 'rating',
-    header: () => <div className="flex-center">Calificación</div>,
-    cell: () => (
-      <div className="flex-center w-full">
-        <Rating />
-      </div>
-    ),
+    accessorKey: 'calificacion',
+    header: 'Calificación',
+    cell: ({ row }) => <Rating rating={row.original.calificacion || 0} />,
   },
   {
-    id: 'actions',
-    header: () => <div className="flex-center">Acciones</div>,
-    cell: () => (
-      <div className="flex justify-center w-full px-2">
+    id: 'acciones',
+    header: 'Acciones',
+    cell: ({ row }) => {
+      const { userId } = row.original;
+      const navigate = useNavigate();
+
+      return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button className="h-8 w-8 p-0">
@@ -141,12 +158,14 @@ export const usersColumns: ColumnDef<User>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Acciones</DropdownMenuLabel>
-            <DropdownMenuItem>Editar</DropdownMenuItem>
             <DropdownMenuItem>Mensaje directo</DropdownMenuItem>
-            <DropdownMenuItem>Eliminar</DropdownMenuItem>
+            <Separator className="my-2" />
+            <DropdownMenuItem onClick={() => navigate(`editar/${userId}`)}>
+              Editar
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-      </div>
-    ),
+      );
+    },
   },
 ];

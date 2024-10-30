@@ -60,19 +60,25 @@ export function UsersTable<TData, TValue>({
 
   return (
     <>
-      <div className="flex gap-5 items-end pb-4">
+      <div className="mt-5 flex flex-col justify-center gap-3">
+        <Label className="text-alt-green-300">
+          Buscar usuarios por nombre, correo o telefono
+        </Label>
+
         <SearchInput
-          className="w-[20rem] bg-alt-gray-600 border-gray-400"
+          className="w-[50rem] bg-alt-gray-600 border-gray-400"
           placeholder="Buscar por nombre..."
-          value={(table.getColumn('detail')?.getFilterValue() as string) ?? ''}
+          value={(table.getColumn('detalle')?.getFilterValue() as string) ?? ''}
           onChange={(event) => {
             return table
-              .getColumn('detail')
+              .getColumn('detalle')
               ?.setFilterValue(event.target.value);
           }}
         />
+      </div>
 
-        <div className="flex flex-col justify-center gap-3">
+      <div className="my-5 flex gap-4">
+        <div className="flex flex-col justify-center gap-2">
           <Label className="text-alt-green-300" htmlFor="departamento">
             Departamento
           </Label>
@@ -81,28 +87,33 @@ export function UsersTable<TData, TValue>({
             onValueChange={(value) => {
               setDepartment(value);
               if (value === 'all') {
-                table.getColumn('department')?.setFilterValue(null);
+                table.getColumn('rol')?.setFilterValue(null);
               } else {
-                table.getColumn('department')?.setFilterValue(value);
+                table.getColumn('rol')?.setFilterValue(value);
               }
             }}
           >
             <SelectTrigger id="departamento" className="w-[180px]">
-              <SelectValue placeholder="Todas" />
+              <SelectValue placeholder="Todos" />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
-                <SelectItem value="all">Todas</SelectItem>
-                <SelectItem value="Vendedor">Vendedor</SelectItem>
-                <SelectItem value="Jurídico">Jurídico</SelectItem>
+                <SelectItem value="all">Todos</SelectItem>
                 <SelectItem value="Marketing">Marketing</SelectItem>
+                <SelectItem value="Juridico">Juridico</SelectItem>
+                <SelectItem value="Ventas">Ventas</SelectItem>
                 <SelectItem value="Gerencia">Gerencia</SelectItem>
-                <SelectItem value="Administración">Administración</SelectItem>
+                <SelectItem value="Dirección">Dirección</SelectItem>
+                <SelectItem value="Admin">Admin</SelectItem>
+                <SelectItem value="Client">Client</SelectItem>
+                <SelectItem value="Asistencia">Asistencia</SelectItem>
+                <SelectItem value="Seguimiento">Seguimiento</SelectItem>
               </SelectGroup>
             </SelectContent>
           </Select>
         </div>
       </div>
+
       <div className="rounded-md border border-alt-green-900 bg-alt-gray-600">
         <Table className="border-b-8 border-alt-green-900">
           <TableHeader>

@@ -1,61 +1,15 @@
 import { useNavigate } from 'react-router-dom';
 
 // ? Components
-import { Button } from '@/components';
+import { Button, TableSkeleton } from '@/components';
 import { usersColumns, UsersTable } from '../components';
 
-// ? Types
-import type { User } from '../interfaces';
+// ? Hooks
+import { useUsers } from '../hooks';
 
 function UsersView() {
   const navigate = useNavigate();
-  const users: User[] = [
-    {
-      id: '1',
-      name: 'John Doe',
-      profilePicture: 'https://github.com/shadcn.png',
-      email: 'john.doe@example.com',
-      role: 'Admin',
-      status: 'Active',
-      department: 'Vendedor',
-    },
-    {
-      id: '2',
-      name: 'Jane Smith',
-      profilePicture: 'https://github.com/shadcn.png',
-      email: 'jane.smith@example.com',
-      role: 'User',
-      status: 'Inactive',
-      department: 'Jurídico',
-    },
-    {
-      id: '3',
-      name: 'Alice Johnson',
-      profilePicture: 'https://github.com/shadcn.png',
-      email: 'alice.johnson@example.com',
-      role: 'User',
-      status: 'Active',
-      department: 'Marketing',
-    },
-    {
-      id: '4',
-      name: 'Bob Williams',
-      profilePicture: 'https://github.com/shadcn.png',
-      email: 'bob.williams@example.com',
-      role: 'Moderator',
-      status: 'Pending',
-      department: 'Gerencia',
-    },
-    {
-      id: '5',
-      name: 'Bob Williams',
-      profilePicture: 'https://github.com/shadcn.png',
-      email: 'bob.williams@example.com',
-      role: 'Moderator',
-      status: 'Pending',
-      department: 'Administración',
-    },
-  ];
+  const { users, isLoading } = useUsers();
 
   return (
     <div className="h-full">
@@ -71,7 +25,11 @@ function UsersView() {
       </section>
 
       <div className="pb-6">
-        <UsersTable columns={usersColumns} data={users} />
+        {isLoading ? (
+          <TableSkeleton amountOfFilters={1} />
+        ) : (
+          <UsersTable columns={usersColumns} data={users} />
+        )}
       </div>
     </div>
   );

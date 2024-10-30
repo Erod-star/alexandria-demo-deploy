@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { RouterProvider } from 'react-router-dom';
-import { useSession, useSessionContext } from '@supabase/auth-helpers-react';
+import { withAuthInfo, WithAuthInfoProps } from '@propelauth/react';
 
 // ? Routes
 import { router } from '@/routes';
@@ -8,29 +8,15 @@ import { router } from '@/routes';
 // ? Components
 import { Toaster } from '@/components';
 
-// ? Plugins
-import { TanstackProvider } from '@/plugins';
-
-// ? Views
-import AuthView from '@/modules/auth/AuthView';
-
-function App() {
-  const session = useSession();
-  const { isLoading } = useSessionContext();
-
+const App = withAuthInfo((props: WithAuthInfoProps) => {
   useEffect(() => {
-    if (session?.provider_token) {
-      localStorage.setItem('provider-token', session.provider_token);
+    if (props.accessToken) {
+      localStorage.setItem('auth-token', props.accessToken);
     }
-  }, [session]);
-
-  // TODO: Hacer validacion de sacar al usuario si el provider_token no expira
-  if (isLoading) return <></>;
-
-  if (!session) return <AuthView />;
+  }, [props]);
 
   return (
-    <TanstackProvider>
+    <>
       <RouterProvider router={router} />
       <Toaster
         toastOptions={{
@@ -45,8 +31,8 @@ function App() {
           },
         }}
       />
-    </TanstackProvider>
+    </>
   );
-}
+});
 
 export default App;

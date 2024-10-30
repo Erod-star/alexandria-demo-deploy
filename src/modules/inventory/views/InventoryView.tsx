@@ -28,9 +28,8 @@ function InventoryView() {
       </section>
 
       <div className="pb-6">
-        {/* // TODO: Añadir loader  */}
         {isLoading ? (
-          <TableSkeleton />
+          <TableSkeleton amountOfFilters={3} />
         ) : (
           <InventoryTable columns={inventoryColumns} data={inventories} />
         )}

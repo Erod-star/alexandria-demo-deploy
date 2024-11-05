@@ -37,7 +37,7 @@ export const CalendarComponent = () => {
   };
 
   return (
-    <div className="h-[47rem] overflow-auto">
+    <div className="h-[40rem] overflow-auto">
       {isLoading ? (
         <div className="flex flex-col h-full">
           <div className="grid grid-cols-3 justify-items-center mb-8">

@@ -32,7 +32,7 @@ export const Step1 = () => {
       estado: wizardAddress?.estado || '',
       municipio: wizardAddress?.municipio || '',
       cp: wizardAddress?.cp?.toString() || '',
-      googleMaps: wizardAddress?.googleMaps || '',
+      googleMaps: wizardAddress?.googleMaps || undefined,
     },
   });
 
@@ -49,13 +49,13 @@ export const Step1 = () => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-10">
-        <div className="flex gap-5">
+      <form onSubmit={form.handleSubmit(onSubmit)}>
+        <div className="grid grid-cols-8 gap-x-5 gap-y-6 sm:gap-y-10">
           <FormField
             control={form.control}
             name="calleYNumero"
             render={({ field }) => (
-              <FormItem className="w-full">
+              <FormItem className="col-span-8 sm:col-span-4">
                 <FormLabel>Calle y número</FormLabel>
                 <FormControl>
                   <Input
@@ -74,7 +74,7 @@ export const Step1 = () => {
             control={form.control}
             name="colonia"
             render={({ field }) => (
-              <FormItem className="w-full">
+              <FormItem className="col-span-8 sm:col-span-4">
                 <FormLabel>Colonia</FormLabel>
                 <FormControl>
                   <Input
@@ -88,14 +88,12 @@ export const Step1 = () => {
               </FormItem>
             )}
           />
-        </div>
 
-        <div className="flex gap-5">
           <FormField
             control={form.control}
             name="estado"
             render={({ field }) => (
-              <FormItem className="w-full">
+              <FormItem className="col-span-8 sm:col-span-3">
                 <FormLabel>Estado</FormLabel>
                 <FormControl>
                   <Input
@@ -114,7 +112,7 @@ export const Step1 = () => {
             control={form.control}
             name="municipio"
             render={({ field }) => (
-              <FormItem className="w-full">
+              <FormItem className="col-span-5 sm:col-span-3">
                 <FormLabel>Alcaldía / Municipio</FormLabel>
                 <FormControl>
                   <Input
@@ -133,7 +131,7 @@ export const Step1 = () => {
             control={form.control}
             name="cp"
             render={({ field }) => (
-              <FormItem className="w-2/5">
+              <FormItem className="col-span-3 sm:col-span-2">
                 <FormLabel>Código postal</FormLabel>
                 <FormControl>
                   <Input
@@ -149,19 +147,16 @@ export const Step1 = () => {
               </FormItem>
             )}
           />
-        </div>
 
-        <div>
           <FormField
             control={form.control}
             name="googleMaps"
             render={({ field }) => (
-              <FormItem className="w-2/3">
+              <FormItem className="col-span-8 sm:col-span-5">
                 <FormLabel>Link Google Maps</FormLabel>
                 <FormControl>
                   <Input
                     placeholder="https://maps.app.goo.gl"
-                    required
                     type="url"
                     {...field}
                   />
@@ -172,7 +167,7 @@ export const Step1 = () => {
           />
         </div>
 
-        <div className="absolute bottom-0 right-0">
+        <div className="mt-10 flex justify-end">
           <Button type="submit">Siguiente</Button>
         </div>
       </form>

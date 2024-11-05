@@ -1,7 +1,14 @@
 import { useNavigate } from 'react-router-dom';
 
 // ? Components
-import { Button, TableSkeleton } from '@/components';
+import {
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  TableSkeleton,
+} from '@/components';
 import { usersColumns, UsersTable } from '../components';
 
 // ? Hooks
@@ -12,25 +19,27 @@ function UsersView() {
   const { users, isLoading } = useUsers();
 
   return (
-    <div className="h-full">
-      <section className="flex justify-between">
-        <h2 className="text-4xl font-bold">Usuarios</h2>
+    <div className="flex h-full">
+      <Card className="flex-grow h-full border-none overflow-x-scroll">
+        <CardHeader className="flex-row items-center justify-between">
+          <CardTitle>Usuarios</CardTitle>
 
-        <Button
-          className="text-base font-semibold"
-          onClick={() => navigate('/usuarios/nuevo')}
-        >
-          + Usuario
-        </Button>
-      </section>
+          <Button
+            className="text-base font-semibold"
+            onClick={() => navigate('/usuarios/nuevo')}
+          >
+            + Usuario
+          </Button>
+        </CardHeader>
 
-      <div className="pb-6">
-        {isLoading ? (
-          <TableSkeleton amountOfFilters={1} />
-        ) : (
-          <UsersTable columns={usersColumns} data={users} />
-        )}
-      </div>
+        <CardContent className="w-screen md:w-auto md:overflow-scroll">
+          {isLoading ? (
+            <TableSkeleton amountOfFilters={1} />
+          ) : (
+            <UsersTable columns={usersColumns} data={users} />
+          )}
+        </CardContent>
+      </Card>
     </div>
   );
 }

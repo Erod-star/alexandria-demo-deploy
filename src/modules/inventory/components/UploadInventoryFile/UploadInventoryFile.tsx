@@ -34,20 +34,22 @@ export const UploadInventoryFile = () => {
   return (
     <div className="w-full h-full flex-center flex-col">
       <Button
-        className="absolute left-5 top-5"
+        className="absolute left-6 top-5"
         disabled={isUploadingFile}
         onClick={() => navigate('/inventario')}
       >
-        Regresar a la lista de inventarios
+        Regresar a la lista de propiedades
       </Button>
 
-      <h2 className="text-4xl font-semibold mb-10">🏚️ Agregar propiedad</h2>
+      <h2 className="text-3xl sm:text-4xl font-semibold mb-10">
+        🏚️ Agregar propiedad
+      </h2>
 
-      <section className="flex items-center justify-center w-[55rem] mb-10">
+      <section className="flex items-center justify-center mb-10">
         <Label
           htmlFor="dropzone-file"
           className={cn(
-            `flex-center flex-col w-full h-48 border border-dashed border-alt-green-300 bg-transparent rounded-md transition-all`,
+            `flex-center flex-col h-48 border border-dashed border-alt-green-300 bg-transparent rounded-md transition-all px-8 w-full md:px-32`,
             isUploadingFile
               ? 'bg-transparent/60'
               : 'hover:bg-transparent/60 hover:cursor-pointer'
@@ -62,8 +64,8 @@ export const UploadInventoryFile = () => {
             </div>
           ) : (
             <div className="flex-center pt-5 pb-6 gap-3">
-              <FileUp className="size-8" />
-              <p className="text-xl text-gray-200 font-semibold">
+              <FileUp className="size-7 sm:size-8" />
+              <p className="text-lg sm:text-xl text-gray-200 font-semibold">
                 Selecciona o arrastra el archivo
               </p>
             </div>
@@ -79,25 +81,33 @@ export const UploadInventoryFile = () => {
         </Label>
       </section>
 
-      <div className="flex-center gap-5 w-2/4 overflow-hidden text-xl">
-        <Separator /> ó <Separator />
-      </div>
+      {isUploadingFile ? (
+        <p>
+          El archivo esta siendo procesado, esto podria llegar a tardar algunos
+          minutos...
+        </p>
+      ) : (
+        <>
+          <div className="flex-center gap-5 w-2/4 overflow-hidden text-xl">
+            <Separator /> ó <Separator />
+          </div>
 
-      <section className="space-y-3 mt-10">
-        <h3 className="text-xl text-center mb-5">
-          Selecciona tipo de propiedad
-        </h3>
+          <section className="space-y-3 mt-10">
+            <h3 className="text-xl text-center mb-5">
+              Crea tu propiedad de forma manual
+            </h3>
 
-        <div className="flex justify-center gap-4">
-          <Button disabled={isUploadingFile} onClick={() => setCurrentStep(1)}>
-            Propiedad Premium
-          </Button>
-
-          <Button disabled={isUploadingFile} onClick={() => setCurrentStep(1)}>
-            Propiedad Classic
-          </Button>
-        </div>
-      </section>
+            <div className="flex justify-center">
+              <Button
+                disabled={isUploadingFile}
+                onClick={() => setCurrentStep(1)}
+              >
+                Comenzar llenado manual
+              </Button>
+            </div>
+          </section>
+        </>
+      )}
     </div>
   );
 };

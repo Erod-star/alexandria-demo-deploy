@@ -73,13 +73,13 @@ export const Step2 = () => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        <div className="flex gap-5">
+      <form onSubmit={form.handleSubmit(onSubmit)}>
+        <div className="grid grid-cols-8 gap-x-5 gap-y-6">
           <FormField
             control={form.control}
             name="lista"
             render={({ field }) => (
-              <FormItem className="w-full">
+              <FormItem className="col-span-8 sm:col-span-4">
                 <FormLabel>Categoría</FormLabel>
                 <Select
                   onValueChange={field.onChange}
@@ -117,7 +117,7 @@ export const Step2 = () => {
             control={form.control}
             name="tipoPropiedad"
             render={({ field }) => (
-              <FormItem className="w-full">
+              <FormItem className="col-span-8 sm:col-span-4">
                 <FormLabel>Tipo de propiedad</FormLabel>
                 <Select
                   onValueChange={field.onChange}
@@ -145,31 +145,29 @@ export const Step2 = () => {
               </FormItem>
             )}
           />
-        </div>
 
-        <FormField
-          control={form.control}
-          name="folioOriginal"
-          render={({ field }) => (
-            <FormItem className="w-1/2">
-              <FormLabel>Folio</FormLabel>
-              <FormControl>
-                <Input
-                  {...field}
-                  minLength={5}
-                  maxLength={5}
-                  placeholder="86228"
-                  required
-                  type="text"
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+          <FormField
+            control={form.control}
+            name="folioOriginal"
+            render={({ field }) => (
+              <FormItem className="col-span-8">
+                <FormLabel>Folio</FormLabel>
+                <FormControl>
+                  <Input
+                    {...field}
+                    minLength={5}
+                    maxLength={5}
+                    placeholder="86228"
+                    required
+                    type="text"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        <div className="grid grid-cols-3 gap-5">
-          <div className="space-y-7 justify-center justify-self-center mx-auto">
+          <div className="col-span-8 space-y-7 justify-center justify-self-center mx-auto lg:col-span-2">
             <FormField
               control={form.control}
               name="recamaras"
@@ -207,7 +205,7 @@ export const Step2 = () => {
             />
           </div>
 
-          <div className="col-span-2">
+          <div className="col-span-8 lg:col-span-6">
             <h3 className="mt-8 text-2xl font-semibold">Superficie</h3>
             <Separator className="my-4" />
 
@@ -251,10 +249,11 @@ export const Step2 = () => {
           </div>
         </div>
 
-        <div className="absolute bottom-0 right-0 flex gap-5">
+        <div className="mt-8 flex justify-end gap-5 pb-5 lg:pb-0 md:mt-5">
           <Button type="button" onClick={setPreviousStep}>
             Anterior
           </Button>
+
           <Button type="submit">Siguiente</Button>
         </div>
       </form>

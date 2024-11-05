@@ -1,7 +1,14 @@
 import { useNavigate } from 'react-router-dom';
 
 // ? Components
-import { Button, TableSkeleton } from '@/components';
+import {
+  Button,
+  Card,
+  TableSkeleton,
+  CardHeader,
+  CardTitle,
+  CardContent,
+} from '@/components';
 import {
   inventoryColumns,
   InventoryTable,
@@ -15,25 +22,27 @@ function InventoryView() {
   const { inventories, isLoading } = useInventories();
 
   return (
-    <div className="h-full">
-      <section className="flex justify-between">
-        <h2 className="text-4xl font-bold">Inventario</h2>
+    <div className="flex h-full">
+      <Card className="flex-grow h-full border-none overflow-x-scroll">
+        <CardHeader className="flex-row items-center justify-between">
+          <CardTitle>Inventario</CardTitle>
 
-        <Button
-          className="text-base font-semibold"
-          onClick={() => navigate('/inventario/nuevo')}
-        >
-          + Propiedad
-        </Button>
-      </section>
+          <Button
+            className="text-base font-semibold"
+            onClick={() => navigate('/inventario/nuevo')}
+          >
+            + Propiedad
+          </Button>
+        </CardHeader>
 
-      <div className="pb-6">
-        {isLoading ? (
-          <TableSkeleton amountOfFilters={3} />
-        ) : (
-          <InventoryTable columns={inventoryColumns} data={inventories} />
-        )}
-      </div>
+        <CardContent className="w-screen md:w-auto md:overflow-scroll">
+          {isLoading ? (
+            <TableSkeleton amountOfFilters={3} />
+          ) : (
+            <InventoryTable columns={inventoryColumns} data={inventories} />
+          )}
+        </CardContent>
+      </Card>
     </div>
   );
 }

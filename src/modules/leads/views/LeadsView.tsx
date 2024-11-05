@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 
 // ? Components
-import { Button } from '@/components';
+import { Button, Card, CardContent, CardHeader, CardTitle } from '@/components';
 import { LeadsTable } from '@/modules/leads/components';
 
 // ? Types
@@ -59,21 +59,23 @@ function LeadsView() {
   ];
 
   return (
-    <div className="h-full">
-      <section className="flex justify-between mb-5">
-        <h2 className="text-4xl font-bold">Leads</h2>
+    <div className="flex h-full">
+      <Card className="flex-grow h-full border-none">
+        <CardHeader className="flex-row items-center justify-between">
+          <CardTitle>Leads</CardTitle>
 
-        <Button
-          className="text-base font-semibold"
-          onClick={() => navigate('/leads/nuevo')}
-        >
-          + Lead
-        </Button>
-      </section>
+          <Button
+            className="text-base font-semibold"
+            onClick={() => navigate('/leads/nuevo')}
+          >
+            + Lead
+          </Button>
+        </CardHeader>
 
-      <div className="pb-6">
-        <LeadsTable data={leads} columns={leadsColumns} />
-      </div>
+        <CardContent className="w-[17rem] xxs:w-[23rem] xs:w-[32.5rem] sm:w-auto">
+          <LeadsTable data={leads} columns={leadsColumns} />
+        </CardContent>
+      </Card>
     </div>
   );
 }

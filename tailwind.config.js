@@ -5,6 +5,10 @@ export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
+      screens: {
+        xs: '524px',
+        xxs: '375px',
+      },
       borderRadius: {
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',
@@ -51,29 +55,37 @@ export default {
           4: 'hsl(var(--chart-4))',
           5: 'hsl(var(--chart-5))',
         },
-        // ? Custom colors
-        // * Red
         'alt-red-400': '#FF7878',
-
-        // * Green
         'alt-green-50': '#e5fffa',
         'alt-green-100': '#ccfff5',
         'alt-green-200': '#b3ffef',
-        'alt-green-300': '#AAFFE3', // Validated
-        'alt-green-400': '#82bfab', // Validated
+        'alt-green-300': '#AAFFE3',
+        'alt-green-400': '#82bfab',
         'alt-green-500': '#66a28e',
         'alt-green-600': '#4d8471',
         'alt-green-700': '#336654',
         'alt-green-800': '#1a4937',
-        'alt-green-900': '#131D1F', // Validated
-
-        // * Slate
+        'alt-green-900': '#131D1F',
         'alt-gray-600': '#2D363B',
+        sidebar: {
+          DEFAULT: 'hsl(var(--sidebar-background))',
+          foreground: 'hsl(var(--sidebar-foreground))',
+          primary: 'hsl(var(--sidebar-primary))',
+          'primary-foreground': 'hsl(var(--sidebar-primary-foreground))',
+          accent: 'hsl(var(--sidebar-accent))',
+          'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
+          border: 'hsl(var(--sidebar-border))',
+          ring: 'hsl(var(--sidebar-ring))',
+        },
       },
       keyframes: {
         'fade-in': {
-          '0%': { opacity: 0 },
-          '100%': { opacity: 1 },
+          '0%': {
+            opacity: '0',
+          },
+          '100%': {
+            opacity: '1',
+          },
         },
       },
       animation: {

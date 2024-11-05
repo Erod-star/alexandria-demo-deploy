@@ -1,16 +1,17 @@
 import { Outlet } from 'react-router-dom';
 
 // ? Components
-import { Navbar } from '@/components';
+import { AppSidebar, Navbar, SidebarProvider } from '@/components';
 
 export default function RootLayout() {
   return (
-    <div>
-      <Navbar />
+    <SidebarProvider>
+      <AppSidebar />
+      <main className="flex flex-col w-full  h-screen overflow-auto">
+        <Navbar />
 
-      <main className="h-[calc(100vh-82px)] py-6 px-10">
         <Outlet />
       </main>
-    </div>
+    </SidebarProvider>
   );
 }

@@ -14,9 +14,11 @@ export const WizardOverviewDetailItem = ({
   return (
     <div className={cn('border p-3 rounded-md', className)}>
       <p className="text-base font-semibold">{header}</p>
-      <span className="text-alt-green-300">
-        {value ? value : 'No establecido'}
-      </span>
+      {value ? (
+        <span className="text-alt-green-300">{value}</span>
+      ) : (
+        <span className="text-red-400">No establecido</span>
+      )}
     </div>
   );
 };

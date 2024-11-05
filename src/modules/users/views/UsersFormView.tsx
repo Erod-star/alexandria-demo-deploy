@@ -12,6 +12,11 @@ import {
 } from 'react-international-phone';
 import {
   Button,
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
   Form,
   FormControl,
   FormDescription,
@@ -123,231 +128,237 @@ const UsersFormView = () => {
 
   return (
     <div className="h-full relative pt-5">
-      {isLoading ? (
-        <div>Loading...</div>
-      ) : (
-        <>
-          <section className="mb-5 flex justify-between">
-            <h2 className="text-4xl font-bold">
-              {isEditing
-                ? `${user?.nombre} ${user?.apellido}`
-                : 'Creación de usuario'}
-            </h2>
-          </section>
+      <Card className="flex-grow h-full border-none">
+        <CardHeader className="flex-row items-center justify-between">
+          <CardTitle>
+            {isEditing
+              ? `${user?.nombre} ${user?.apellido}`
+              : 'Creación de usuario'}
+          </CardTitle>
+        </CardHeader>
 
-          <div className="py-6">
-            <Form {...form}>
-              <form
-                onSubmit={form.handleSubmit(onSubmit)}
-                className="space-y-6"
-              >
-                <div className="grid grid-cols-2 gap-7">
-                  <FormField
-                    control={form.control}
-                    name="nombre"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Nombre(s)</FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder="Juan Alberto"
-                            type="text"
-                            minLength={2}
-                            required
-                            disabled={hasRequestsPending}
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="apellido"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Apellidos</FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder="Pérez Rodríguez"
-                            type="text"
-                            minLength={2}
-                            required
-                            disabled={hasRequestsPending}
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="telefono"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Teléfono</FormLabel>
-                        <FormControl>
-                          <PhoneInput
-                            required
-                            defaultCountry="mx"
-                            countries={countries}
-                            disabled={hasRequestsPending}
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="rol"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Rol</FormLabel>
-                        <Select
-                          onValueChange={field.onChange}
-                          defaultValue={field.value}
-                          value={field.value}
-                          disabled={hasRequestsPending}
-                        >
+        <CardContent>
+          {isLoading ? (
+            <div>Loading...</div>
+          ) : (
+            <>
+              <Form {...form}>
+                <form
+                  onSubmit={form.handleSubmit(onSubmit)}
+                  className="space-y-6"
+                >
+                  <div className="grid grid-cols-2 gap-7">
+                    <FormField
+                      control={form.control}
+                      name="nombre"
+                      render={({ field }) => (
+                        <FormItem className="col-span-2 sm:col-span-1">
+                          <FormLabel>Nombre(s)</FormLabel>
                           <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Selecciona uno" />
-                            </SelectTrigger>
+                            <Input
+                              placeholder="Juan Alberto"
+                              type="text"
+                              minLength={2}
+                              required
+                              disabled={hasRequestsPending}
+                              {...field}
+                            />
                           </FormControl>
-                          <SelectContent>
-                            <SelectItem value="Marketing">Marketing</SelectItem>
-                            <SelectItem value="Juridico">Juridico</SelectItem>
-                            <SelectItem value="Ventas">Ventas</SelectItem>
-                            <SelectItem value="Gerencia">Gerencia</SelectItem>
-                            <SelectItem value="Dirección">Dirección</SelectItem>
-                            <SelectItem value="Admin">Admin</SelectItem>
-                            <SelectItem value="Client">Client</SelectItem>
-                            <SelectItem value="Asistencia">
-                              Asistencia
-                            </SelectItem>
-                            <SelectItem value="Seguimiento">
-                              Seguimiento
-                            </SelectItem>
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
 
-                  <FormField
-                    control={form.control}
-                    name="correoPersonal"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Correo electrónico personal</FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder="juan@gmail.com"
-                            type="email"
+                    <FormField
+                      control={form.control}
+                      name="apellido"
+                      render={({ field }) => (
+                        <FormItem className="col-span-2 sm:col-span-1">
+                          <FormLabel>Apellidos</FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder="Pérez Rodríguez"
+                              type="text"
+                              minLength={2}
+                              required
+                              disabled={hasRequestsPending}
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="telefono"
+                      render={({ field }) => (
+                        <FormItem className="col-span-2 sm:col-span-1">
+                          <FormLabel>Teléfono</FormLabel>
+                          <FormControl>
+                            <PhoneInput
+                              required
+                              defaultCountry="mx"
+                              countries={countries}
+                              disabled={hasRequestsPending}
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="rol"
+                      render={({ field }) => (
+                        <FormItem className="col-span-2 sm:col-span-1">
+                          <FormLabel>Rol</FormLabel>
+                          <Select
+                            onValueChange={field.onChange}
+                            defaultValue={field.value}
+                            value={field.value}
                             disabled={hasRequestsPending}
-                            required
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-
-                {roleField !== 'Client' && roleField !== '' && (
-                  <div>
-                    <h3
-                      className="form-subtitle mt-8 mb-4 text-lg font-medium tracking-tight"
-                      data-testid="form-subtitle"
-                    >
-                      Validaciones para usuarios internos
-                    </h3>
-
-                    <Separator className="my-3" />
-
-                    <div className="grid grid-cols-2 gap-7">
-                      <FormField
-                        control={form.control}
-                        name="correoEmpresarial"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>
-                              Correo electrónico empresarial
-                            </FormLabel>
+                          >
                             <FormControl>
-                              <Input
-                                placeholder="juan@gmail.com"
-                                type="email"
-                                disabled={hasRequestsPending}
-                                {...field}
-                              />
+                              <SelectTrigger>
+                                <SelectValue placeholder="Selecciona uno" />
+                              </SelectTrigger>
                             </FormControl>
-                            <FormDescription>
-                              Para este campo es necesario utilizar un correo
-                              gmail
-                            </FormDescription>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
+                            <SelectContent>
+                              <SelectItem value="Marketing">
+                                Marketing
+                              </SelectItem>
+                              <SelectItem value="Juridico">Juridico</SelectItem>
+                              <SelectItem value="Ventas">Ventas</SelectItem>
+                              <SelectItem value="Gerencia">Gerencia</SelectItem>
+                              <SelectItem value="Dirección">
+                                Dirección
+                              </SelectItem>
+                              <SelectItem value="Admin">Admin</SelectItem>
+                              <SelectItem value="Client">Client</SelectItem>
+                              <SelectItem value="Asistencia">
+                                Asistencia
+                              </SelectItem>
+                              <SelectItem value="Seguimiento">
+                                Seguimiento
+                              </SelectItem>
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="correoPersonal"
+                      render={({ field }) => (
+                        <FormItem className="col-span-2 sm:col-span-1">
+                          <FormLabel>Correo electrónico personal</FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder="juan@gmail.com"
+                              type="email"
+                              disabled={hasRequestsPending}
+                              required
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
                   </div>
-                )}
 
-                <div className="flex justify-between w-full absolute right-0 bottom-5">
-                  <Button
-                    className={isEditing ? 'w-36 flex' : 'invisible'}
-                    type="button"
-                    variant="destructive"
-                    disabled={hasRequestsPending}
-                    onClick={handleDelete}
-                  >
-                    {deleteMutation.isPending ? (
-                      <LoadingSpinner className="size-4" />
-                    ) : (
-                      'Eliminar usuario'
-                    )}
-                  </Button>
+                  {roleField !== 'Client' && roleField !== '' && (
+                    <div>
+                      <h3
+                        className="form-subtitle mt-8 mb-4 text-lg font-medium tracking-tight"
+                        data-testid="form-subtitle"
+                      >
+                        Validaciones para usuarios internos
+                      </h3>
 
-                  <div className="flex gap-3">
+                      <Separator className="my-3" />
+
+                      <div className="grid grid-cols-2 gap-7">
+                        <FormField
+                          control={form.control}
+                          name="correoEmpresarial"
+                          render={({ field }) => (
+                            <FormItem className="col-span-2 sm:col-span-1">
+                              <FormLabel>
+                                Correo electrónico empresarial
+                              </FormLabel>
+                              <FormControl>
+                                <Input
+                                  placeholder="juan@gmail.com"
+                                  type="email"
+                                  disabled={hasRequestsPending}
+                                  {...field}
+                                />
+                              </FormControl>
+                              <FormDescription>
+                                Para este campo es necesario utilizar un correo
+                                gmail
+                              </FormDescription>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                    </div>
+                  )}
+
+                  <CardFooter className="flex-col-reverse gap-5 items-start sm:flex-row justify-between placeholder-opacity-100 px-0">
                     <Button
+                      className={isEditing ? 'w-36 flex' : 'invisible'}
                       type="button"
-                      variant="secondary"
+                      variant="destructive"
                       disabled={hasRequestsPending}
-                      onClick={() => navigate('/usuarios')}
+                      onClick={handleDelete}
                     >
-                      Cancelar
-                    </Button>
-
-                    <Button
-                      className="min-w-28"
-                      disabled={hasRequestsPending || !isDirty}
-                      type="submit"
-                    >
-                      {createMutation.isPending || editMutation.isPending ? (
+                      {deleteMutation.isPending ? (
                         <LoadingSpinner className="size-4" />
-                      ) : isEditing ? (
-                        'Actualizar usuario'
                       ) : (
-                        'Crear usuario'
+                        'Eliminar usuario'
                       )}
                     </Button>
-                  </div>
-                </div>
-              </form>
-            </Form>
-          </div>
-        </>
-      )}
+
+                    <div className="w-full sm:w-auto flex gap-3 justify-between">
+                      <Button
+                        type="button"
+                        variant="secondary"
+                        disabled={hasRequestsPending}
+                        onClick={() => navigate('/usuarios')}
+                      >
+                        Cancelar
+                      </Button>
+
+                      <Button
+                        className="min-w-28"
+                        disabled={hasRequestsPending || !isDirty}
+                        type="submit"
+                      >
+                        {createMutation.isPending || editMutation.isPending ? (
+                          <LoadingSpinner className="size-4" />
+                        ) : isEditing ? (
+                          'Actualizar usuario'
+                        ) : (
+                          'Crear usuario'
+                        )}
+                      </Button>
+                    </div>
+                  </CardFooter>
+                </form>
+              </Form>
+            </>
+          )}
+        </CardContent>
+      </Card>
     </div>
   );
 };

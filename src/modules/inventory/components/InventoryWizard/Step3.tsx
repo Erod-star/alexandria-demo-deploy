@@ -54,58 +54,60 @@ export const Step3 = () => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-10">
-        <div>
-          <h3 className="mt-2 text-2xl font-semibold">Capital de pagos</h3>
-          <Separator className="my-5" />
-
-          <div className="flex gap-5">
-            <FormField
-              control={form.control}
-              name="primerPago"
-              render={({ field }) => (
-                <FormItem className="mb-4 w-2/3">
-                  <FormLabel>Primer pago</FormLabel>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      required
-                      placeholder="150 000"
-                      type="text"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="segundoPago"
-              render={({ field }) => (
-                <FormItem className="mb-4 w-2/3">
-                  <FormLabel>Segundo pago</FormLabel>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      required
-                      placeholder="100 000"
-                      type="text"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+        <div className="grid grid-cols-2 gap-x-5 ">
+          <div className="col-span-2">
+            <h3 className="text-2xl font-semibold">Capital de pagos</h3>
+            <Separator className="my-5" />
           </div>
 
-          <h3 className="mt-4 text-2xl font-semibold">Valor del terreno</h3>
-          <Separator className="my-5" />
+          <FormField
+            control={form.control}
+            name="primerPago"
+            render={({ field }) => (
+              <FormItem className="col-span-2 sm:col-span-1">
+                <FormLabel>Primer pago</FormLabel>
+                <FormControl>
+                  <Input
+                    {...field}
+                    required
+                    placeholder="150 000"
+                    type="text"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="segundoPago"
+            render={({ field }) => (
+              <FormItem className="pt-3 col-span-2 sm:pt-0 sm:col-span-1">
+                <FormLabel>Segundo pago</FormLabel>
+                <FormControl>
+                  <Input
+                    {...field}
+                    required
+                    placeholder="100 000"
+                    type="text"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <div className="col-span-2 pt-8">
+            <h3 className="mt-4 text-2xl font-semibold">Valor del terreno</h3>
+            <Separator className="my-5" />
+          </div>
 
           <FormField
             control={form.control}
             name="valorAproximado"
             render={({ field }) => (
-              <FormItem className="mb-4 w-1/2">
+              <FormItem className="col-span-2 sm:col-span-1">
                 <FormLabel>Valor remate</FormLabel>
                 <FormControl>
                   <Input
@@ -121,7 +123,7 @@ export const Step3 = () => {
           />
         </div>
 
-        <div className="absolute bottom-0 right-0 flex gap-5">
+        <div className="mt-8 md:mt-5 flex justify-end gap-5">
           <Button type="button" onClick={setPreviousStep}>
             Anterior
           </Button>

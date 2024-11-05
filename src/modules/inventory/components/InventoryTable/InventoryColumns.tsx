@@ -56,12 +56,13 @@ const detalleFilterFn: FilterFn<Inventory> = (
   filterValue: any
 ) => {
   if (filterValue === null) return true;
-  const { recamaras, sanitarios } = row.original;
+  const { recamaras, sanitarios, estacionamientos } = row.original;
   const recamarasTag = `recamaras${recamaras || 0}`;
   const sanitariosTag = `sanitarios${sanitarios || 0}`;
+  const estacionamientosTag = `estacionamientos${estacionamientos || 0}`;
 
   const filterParts = filterValue.split(' ');
-  const rowValues = `${recamarasTag} ${sanitariosTag}`;
+  const rowValues = `${recamarasTag} ${sanitariosTag} ${estacionamientosTag}`;
 
   return filterParts.every((partial: string) => rowValues.includes(partial));
 };
@@ -190,9 +191,7 @@ export const inventoryColumns: ColumnDef<Inventory>[] = [
       const property = row.original;
       return (
         <div className="flex-center">
-          <Badge className="bg-alt-green-300 text-alt-green-900">
-            {property.etapa}
-          </Badge>
+          <Badge variant="altaltium">{property.etapa}</Badge>
         </div>
       );
     },

@@ -10,20 +10,16 @@ import {
   Avatar,
   AvatarFallback,
   AvatarImage,
+  Badge,
   Button,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuTrigger,
-  Separator,
 } from '@/components';
 
-import {
-  UserDepartmentBadge,
-  Rewards,
-  Rating,
-} from '@/modules/users/components';
+import { Rewards, Rating } from '@/modules/users/components';
 
 // ? Types
 import type { Row, FilterFn } from '@tanstack/react-table';
@@ -128,8 +124,12 @@ export const usersColumns: ColumnDef<User>[] = [
   },
   {
     accessorKey: 'rol',
-    header: 'Departamento',
-    cell: ({ row }) => <UserDepartmentBadge department={row.original.rol} />,
+    header: 'Rol',
+    cell: ({ row }) => (
+      <Badge className="capitalize" variant="altaltium">
+        {row.original.rol}
+      </Badge>
+    ),
   },
   {
     accessorKey: 'recompensas',
@@ -158,8 +158,6 @@ export const usersColumns: ColumnDef<User>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Acciones</DropdownMenuLabel>
-            <DropdownMenuItem>Mensaje directo</DropdownMenuItem>
-            <Separator className="my-2" />
             <DropdownMenuItem onClick={() => navigate(`editar/${userId}`)}>
               Editar
             </DropdownMenuItem>

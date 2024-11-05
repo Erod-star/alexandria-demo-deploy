@@ -8,12 +8,14 @@ interface EmptyProps {
   description?: string;
   header?: string;
   className?: string;
+  children?: React.ReactNode;
 }
 
 export const Empty = ({
   description = 'No se encontraron resultados para este recurso',
   header = 'Sin resultados',
   className = '',
+  children,
 }: EmptyProps) => {
   return (
     <div className="flex-center">
@@ -27,7 +29,7 @@ export const Empty = ({
           <CircleAlert className="size-[100px]" />
         </div>
         <h2 className="text-2xl font-bold">{header}</h2>
-        <p>{description}</p>
+        {children ? children : <p>{description}</p>}
       </div>
     </div>
   );

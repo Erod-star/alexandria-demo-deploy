@@ -60,13 +60,13 @@ export function UsersTable<TData, TValue>({
 
   return (
     <>
-      <div className="mt-5 flex flex-col justify-center gap-3">
+      <div className="flex flex-col justify-center gap-3">
         <Label className="text-alt-green-300">
           Buscar usuarios por nombre, correo o telefono
         </Label>
 
         <SearchInput
-          className="w-[50rem] bg-alt-gray-600 border-gray-400"
+          className="w-full md:max-w-[50rem] bg-alt-gray-600 border-gray-400"
           placeholder="Buscar por nombre..."
           value={(table.getColumn('detalle')?.getFilterValue() as string) ?? ''}
           onChange={(event) => {
@@ -93,7 +93,7 @@ export function UsersTable<TData, TValue>({
               }
             }}
           >
-            <SelectTrigger id="departamento" className="w-[180px]">
+            <SelectTrigger id="departamento" className="w-full md:w-44">
               <SelectValue placeholder="Todos" />
             </SelectTrigger>
             <SelectContent>

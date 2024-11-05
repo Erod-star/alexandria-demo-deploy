@@ -24,7 +24,8 @@ const badgeVariants = cva(
         danger: 'bg-red-400 border-red-950 text-black px-3 py-1 shadow-md',
         base: '',
         // ? Departments
-        vendedor: 'bg-alt-green-300 text-black border-none shadow-sm',
+        altaltium:
+          'bg-alt-green-300 text-black border-alt-green-600 shadow-sm px-3 py-1',
       },
     },
     defaultVariants: {

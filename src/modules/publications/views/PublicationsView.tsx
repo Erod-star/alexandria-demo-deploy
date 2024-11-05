@@ -1,20 +1,20 @@
+// ? Components
+import { Button, Card, CardContent, CardHeader, CardTitle } from '@/components';
+
 function PublicationsView() {
   return (
     <div className="h-full">
-      <section className="flex justify-between">
-        <h2 className="text-4xl font-bold">Publicaciones</h2>
+      <Card className="flex-grow h-full border-none">
+        <CardHeader className="flex-row items-center justify-between">
+          <CardTitle>Publicaciones</CardTitle>
 
-        {/* <Button
-          className="text-base font-semibold"
-          onClick={() => navigate('/leads/nuevo')}
-        >
-          + Publicacion
-        </Button> */}
-      </section>
+          <Button className="text-base font-semibold">+ Publicación</Button>
+        </CardHeader>
 
-      <div className="pb-6">
-        <h3>Aqui va la tabla!</h3>
-      </div>
+        <CardContent>
+          <h3>Aqui va la tabla!</h3>
+        </CardContent>
+      </Card>
     </div>
   );
 }

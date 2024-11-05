@@ -191,7 +191,7 @@ export const inventoryColumns: ColumnDef<Inventory>[] = [
       const property = row.original;
       return (
         <div className="flex-center">
-          <Badge variant="altaltium">{property.etapa}</Badge>
+          <Badge variant="altaltium">{property.etapa || 'Sin etapa'}</Badge>
         </div>
       );
     },
@@ -258,8 +258,8 @@ export const inventoryColumns: ColumnDef<Inventory>[] = [
     cell: ({ row }) => {
       const { deleteMutation } = useInventoryMutations();
 
+      const { inventoryId } = row.original;
       const handleDelete = () => {
-        const { inventoryId } = row.original;
         deleteMutation.mutateAsync(inventoryId);
       };
 
@@ -274,7 +274,11 @@ export const inventoryColumns: ColumnDef<Inventory>[] = [
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Acciones</DropdownMenuLabel>
-              <DropdownMenuItem>Publicar</DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => console.log('::id', inventoryId)}
+              >
+                Publicar
+              </DropdownMenuItem>
               <DropdownMenuItem onClick={handleDelete}>
                 Eliminar
               </DropdownMenuItem>

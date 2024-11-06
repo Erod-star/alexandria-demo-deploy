@@ -12,6 +12,7 @@ import RootLayout from '@/layouts/RootLayout';
 
 // Announcements
 import AnnouncementsView from '@/modules/announcements/views/AnnouncementsView';
+import CreateAnnouncementView from '@/modules/announcements/views/CreateAnnouncementView';
 
 // Calendar
 import CalendarView from '@/modules/calendar/views/CalendarView';
@@ -51,6 +52,7 @@ export const router = createBrowserRouter(
 
         <Route path="publicaciones">
           <Route index element={<AnnouncementsView />} />
+          <Route path="nueva/:id" element={<CreateAnnouncementView />} />
         </Route>
 
         <Route path="peticiones">

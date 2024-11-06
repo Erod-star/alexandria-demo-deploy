@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { ColumnDef, FilterFn, Row } from '@tanstack/react-table';
 
@@ -30,7 +31,7 @@ import { useInventoryMutations } from '../../hooks';
 import { formatToMxn } from '@/helpers';
 
 // ? Types
-import { Inventory } from '../../types';
+import type { Inventory } from '../../types';
 
 const customFilterFn: FilterFn<Inventory> = (
   row: Row<Inventory>,
@@ -256,6 +257,7 @@ export const inventoryColumns: ColumnDef<Inventory>[] = [
     id: 'acciones',
     header: () => <div className="flex-center">Acciones</div>,
     cell: ({ row }) => {
+      const navigate = useNavigate();
       const { deleteMutation } = useInventoryMutations();
 
       const { inventoryId } = row.original;
@@ -275,7 +277,7 @@ export const inventoryColumns: ColumnDef<Inventory>[] = [
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Acciones</DropdownMenuLabel>
               <DropdownMenuItem
-                onClick={() => console.log('::id', inventoryId)}
+                onClick={() => navigate(`/publicaciones/nueva/${inventoryId}`)}
               >
                 Publicar
               </DropdownMenuItem>

@@ -15,7 +15,7 @@ export const getAnnouncements = async (): Promise<GetAnnouncementsResponse> => {
     );
     return data;
   } catch (error) {
-    console.log('::Publicaciones', error);
+    console.log('::Announcements', error);
     throw new Error('⚠️ Error obteniendo las publicaciones');
   }
 };

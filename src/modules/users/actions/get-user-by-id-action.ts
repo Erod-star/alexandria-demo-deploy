@@ -16,6 +16,7 @@ export const getUserById = async (id?: string): Promise<User | undefined> => {
     );
     return data.data;
   } catch (error) {
+    console.error('::Users', error);
     throw new Error('⚠️ Error obteniendo los usuarios');
   }
 };

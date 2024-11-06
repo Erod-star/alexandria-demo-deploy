@@ -18,6 +18,7 @@ export const createUser = async (
     );
     return data;
   } catch (error) {
+    console.error('::Users', error);
     throw new Error('⚠️ Error creando el usuario');
   }
 };

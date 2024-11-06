@@ -17,6 +17,7 @@ export const getUsers = async (): Promise<GetUsersResponse> => {
     const { data } = await alexandriaApi.get<GetUsersResponse>('/user');
     return data;
   } catch (error) {
+    console.error('::Users', error);
     throw new Error('⚠️ Error obteniendo los usuarios');
   }
 };

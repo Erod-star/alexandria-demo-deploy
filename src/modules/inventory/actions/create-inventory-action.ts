@@ -18,6 +18,7 @@ export const createInventory = async (
     );
     return data.data;
   } catch (error) {
+    console.error('::Inventory', error);
     throw new Error('⚠️ Error al crear el inventario');
   }
 };

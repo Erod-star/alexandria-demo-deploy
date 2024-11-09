@@ -101,4 +101,17 @@
       }
     }
   }
+
+  form {
+    .form-required-field {
+      label {
+        &::after {
+          color: red;
+          content: '*';
+          padding-left: 3px;
+          top: 6px;
+        }
+      }
+    }
+  }
 }

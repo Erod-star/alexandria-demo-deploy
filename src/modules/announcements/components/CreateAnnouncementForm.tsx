@@ -4,8 +4,14 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
+import { v4 as uuidv4 } from 'uuid';
+import { toast } from 'sonner';
+
 // ? Utils
 import { cn } from '@/lib/utils';
+
+// ? Icons
+import { Copy, Plus } from 'lucide-react';
 
 // ? Components
 import {
@@ -18,10 +24,17 @@ import {
   FormLabel,
   FormMessage,
   Input,
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
 } from '@/components';
 
 // ? Schemas
 import { createAnnouncementFormSchema } from '../schemas';
+
+// ? Types
+import type { AnnouncementResourceId } from '../schemas';
 
 interface CreateAnnouncementFormProps {
   className?: string;
@@ -44,15 +57,29 @@ export const CreateAnnouncementForm = ({
     },
   });
 
-  const handleSubmit = (
-    values: z.infer<typeof createAnnouncementFormSchema>
-  ) => {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
+  const proppitIdField = form.watch('proppitId');
+  const inmbueblesIdField = form.watch('inmueblesId');
+  const meliIdField = form.watch('meliId');
+
+  const handleGenerateId = (field: AnnouncementResourceId): void => {
+    const generatedId = uuidv4().replace(/-/g, '').slice(0, 8);
+    form.setValue(field, generatedId);
   };
 
-  //   ! 8 caracteres para el boton de generación de muuid
+  const handleCopyIdToClipboard = (field: AnnouncementResourceId): void => {
+    const currentId = form.getValues(field);
+    navigator.clipboard.writeText(currentId);
+    toast('Id copiado en el portapapeles', {
+      duration: 1500,
+    });
+  };
+
+  const handleSubmit = (
+    values: z.infer<typeof createAnnouncementFormSchema>
+  ): void => {
+    // TODO: Do something with the form values.
+    console.log(values);
+  };
 
   return (
     <div
@@ -63,169 +90,295 @@ export const CreateAnnouncementForm = ({
     >
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-8">
-          <h3 className="text-lg font-semibold text-alt-green-300">Proppit</h3>
+          <TooltipProvider>
+            <h3 className="text-lg font-semibold text-alt-green-300">
+              Proppit
+            </h3>
 
-          <div className="space-y-4 !mt-2">
-            <FormField
-              control={form.control}
-              name="proppitId"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>ID</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="00000000-0000-000-0000-00000000"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormDescription>
-                    Id referente a{' '}
-                    <span className="text-alt-green-300 font-semibold">
-                      Proppit
-                    </span>
-                    ,{' '}
-                    <span className="font-semibold">
-                      {' '}
-                      debe ser llenado de manera cuidadosa.
-                    </span>
-                  </FormDescription>
+            <div className="space-y-4 !mt-2">
+              <FormField
+                control={form.control}
+                name="proppitId"
+                render={({ field }) => (
+                  <FormItem className="form-required-field">
+                    <FormLabel>ID</FormLabel>
 
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+                    <FormControl className="flex items-center gap-3">
+                      <div>
+                        <Input
+                          required
+                          type="text"
+                          maxLength={8}
+                          placeholder="00000000"
+                          {...field}
+                        />
 
-            <FormField
-              control={form.control}
-              name="proppitLink"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Url de la propiedad</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="url"
-                      placeholder="https://propit.com"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
+                        <Tooltip delayDuration={300}>
+                          <TooltipTrigger asChild>
+                            <Button
+                              size="icon"
+                              type="button"
+                              disabled={!proppitIdField}
+                              onClick={() =>
+                                handleCopyIdToClipboard('proppitId')
+                              }
+                            >
+                              <Copy className="size-4" />
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>Copiar id</p>
+                          </TooltipContent>
+                        </Tooltip>
 
-          <h3 className="text-lg font-semibold text-alt-green-300">
-            Inmuebles 24
-          </h3>
+                        <Tooltip delayDuration={300}>
+                          <TooltipTrigger asChild>
+                            <Button
+                              size="icon"
+                              type="button"
+                              disabled={proppitIdField !== ''}
+                              onClick={() => handleGenerateId('proppitId')}
+                            >
+                              <Plus className="size-4" />
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>Generar id aleatorio</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </div>
+                    </FormControl>
 
-          <div className="space-y-4 !mt-2">
-            <FormField
-              control={form.control}
-              name="inmueblesId"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>ID</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="00000000-0000-000-0000-00000000"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormDescription>
-                    Id referente a{' '}
-                    <span className="text-alt-green-300 font-semibold">
-                      Inmuebles 24
-                    </span>
-                    ,{' '}
-                    <span className="font-semibold">
-                      {' '}
-                      debe ser llenado de manera cuidadosa.
-                    </span>
-                  </FormDescription>
+                    <FormDescription>
+                      Id referente a{' '}
+                      <span className="text-alt-green-300 font-semibold">
+                        Proppit
+                      </span>
+                      ,{' '}
+                      <span className="font-semibold">
+                        {' '}
+                        debe ser llenado de manera cuidadosa.
+                      </span>
+                    </FormDescription>
 
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-            <FormField
-              control={form.control}
-              name="inmueblesLink"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Url de la propiedad</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="url"
-                      placeholder="https://inmuebles24.com"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
+              <FormField
+                control={form.control}
+                name="proppitLink"
+                render={({ field }) => (
+                  <FormItem className="form-required-field">
+                    <FormLabel>Url de la propiedad</FormLabel>
+                    <FormControl>
+                      <Input
+                        required
+                        type="url"
+                        placeholder="https://propit.com"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
 
-          <h3 className="text-lg font-semibold text-alt-green-300">
-            Mercado Libre
-          </h3>
+            <h3 className="text-lg font-semibold text-alt-green-300">
+              Inmuebles 24
+            </h3>
 
-          <div className="space-y-4 !mt-2">
-            <FormField
-              control={form.control}
-              name="meliId"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>ID</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="00000000-0000-000-0000-00000000"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormDescription>
-                    Id referente a{' '}
-                    <span className="text-alt-green-300 font-semibold">
-                      Mercado Libre
-                    </span>
-                    ,{' '}
-                    <span className="font-semibold">
-                      {' '}
-                      debe ser llenado de manera cuidadosa.
-                    </span>
-                  </FormDescription>
+            <div className="space-y-4 !mt-2">
+              <FormField
+                control={form.control}
+                name="inmueblesId"
+                render={({ field }) => (
+                  <FormItem className="form-required-field">
+                    <FormLabel>ID</FormLabel>
 
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+                    <FormControl className="flex items-center gap-3">
+                      <div>
+                        <Input
+                          required
+                          type="text"
+                          maxLength={8}
+                          placeholder="00000000"
+                          {...field}
+                        />
 
-            <FormField
-              control={form.control}
-              name="inmueblesLink"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Url de la propiedad</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="url"
-                      placeholder="https://casa.mercadolibre.com.mx"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
+                        <Tooltip delayDuration={300}>
+                          <TooltipTrigger asChild>
+                            <Button
+                              size="icon"
+                              type="button"
+                              disabled={!inmbueblesIdField}
+                              onClick={() =>
+                                handleCopyIdToClipboard('inmueblesId')
+                              }
+                            >
+                              <Copy className="size-4" />
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>Copiar id</p>
+                          </TooltipContent>
+                        </Tooltip>
 
-          <div className="flex justify-end gap-5">
-            <Button type="button" onClick={() => navigate('/inventario')}>
-              Cancelar
-            </Button>
-            <Button type="submit">Crear publicación</Button>
-          </div>
+                        <Tooltip delayDuration={300}>
+                          <TooltipTrigger asChild>
+                            <Button
+                              size="icon"
+                              type="button"
+                              disabled={inmbueblesIdField !== ''}
+                              onClick={() => handleGenerateId('inmueblesId')}
+                            >
+                              <Plus className="size-4" />
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>Generar id aleatorio</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </div>
+                    </FormControl>
+                    <FormDescription>
+                      Id referente a{' '}
+                      <span className="text-alt-green-300 font-semibold">
+                        Inmuebles 24
+                      </span>
+                      ,{' '}
+                      <span className="font-semibold">
+                        {' '}
+                        debe ser llenado de manera cuidadosa.
+                      </span>
+                    </FormDescription>
+
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="inmueblesLink"
+                render={({ field }) => (
+                  <FormItem className="form-required-field">
+                    <FormLabel>Url de la propiedad</FormLabel>
+                    <FormControl>
+                      <Input
+                        required
+                        type="url"
+                        placeholder="https://inmuebles24.com"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            <h3 className="text-lg font-semibold text-alt-green-300">
+              Mercado Libre
+            </h3>
+
+            <div className="space-y-4 !mt-2">
+              <FormField
+                control={form.control}
+                name="meliId"
+                render={({ field }) => (
+                  <FormItem className="form-required-field">
+                    <FormLabel>ID</FormLabel>
+
+                    <FormControl className="flex items-center gap-3">
+                      <div>
+                        <Input
+                          required
+                          type="text"
+                          maxLength={8}
+                          placeholder="00000000"
+                          {...field}
+                        />
+                        <Tooltip delayDuration={300}>
+                          <TooltipTrigger asChild>
+                            <Button
+                              size="icon"
+                              type="button"
+                              disabled={!meliIdField}
+                              onClick={() => handleCopyIdToClipboard('meliId')}
+                            >
+                              <Copy className="size-4" />
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>Copiar id</p>
+                          </TooltipContent>
+                        </Tooltip>
+
+                        <Tooltip delayDuration={300}>
+                          <TooltipTrigger asChild>
+                            <Button
+                              size="icon"
+                              type="button"
+                              disabled={meliIdField !== ''}
+                              onClick={() => handleGenerateId('meliId')}
+                            >
+                              <Plus className="size-4" />
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>Generar id aleatorio</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </div>
+                    </FormControl>
+
+                    <FormDescription>
+                      Id referente a{' '}
+                      <span className="text-alt-green-300 font-semibold">
+                        Mercado Libre
+                      </span>
+                      ,{' '}
+                      <span className="font-semibold">
+                        {' '}
+                        debe ser llenado de manera cuidadosa.
+                      </span>
+                    </FormDescription>
+
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="inmueblesLink"
+                render={({ field }) => (
+                  <FormItem className="form-required-field">
+                    <FormLabel>Url de la propiedad</FormLabel>
+                    <FormControl>
+                      <Input
+                        required
+                        type="url"
+                        placeholder="https://casa.mercadolibre.com.mx"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            <div className="flex justify-end gap-5">
+              <Button type="button" onClick={() => navigate('/inventario')}>
+                Cancelar
+              </Button>
+              <Button type="submit">Crear publicación</Button>
+            </div>
+          </TooltipProvider>
         </form>
       </Form>
     </div>

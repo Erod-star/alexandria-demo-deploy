@@ -1,8 +1,16 @@
 import { ColumnDef } from '@tanstack/react-table';
 import { toast } from 'sonner';
+import type { FilterFn, Row } from '@tanstack/react-table';
 
 // ? Icons
-import { Building2, Hand, House, MapPin, MoreHorizontal } from 'lucide-react';
+import {
+  ArrowUpDown,
+  Building2,
+  Hand,
+  House,
+  MapPin,
+  MoreHorizontal,
+} from 'lucide-react';
 
 // ? Components
 import { HandleImages } from '@/modules/inventory/components';
@@ -21,6 +29,24 @@ import { formatToMxn } from '@/lib/utils';
 
 // ? Types
 import type { Announcement } from '../../types';
+
+const customFilterFn: FilterFn<Announcement> = (
+  row: Row<Announcement>,
+  _: string,
+  filterValue: any
+) => {
+  filterValue = filterValue.toLowerCase();
+
+  const { calleYNumero, tipoPropiedad, estado } = row.original.inventory;
+  const calleYNumeroTag = calleYNumero.toLowerCase();
+  const tipoPropiedadTag = tipoPropiedad?.toLowerCase() || '';
+  const estadoTag = estado?.toLowerCase() || '';
+
+  const filterParts = filterValue.split(' ');
+  const rowValues = `${calleYNumeroTag} ${tipoPropiedadTag} ${estadoTag}`;
+
+  return filterParts.every((partial: string) => rowValues.includes(partial));
+};
 
 export const announcementColumns: ColumnDef<Announcement>[] = [
   {
@@ -42,7 +68,19 @@ export const announcementColumns: ColumnDef<Announcement>[] = [
   {
     id: 'inventory.calleYNumero',
     accessorKey: 'inventory.calleYNumero',
-    header: 'Detalles de la propiedad',
+    filterFn: customFilterFn,
+    header: ({ column }) => {
+      return (
+        <Button
+          className="text-lg"
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          Detalle de la propiedad
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
     cell: ({ row }) => {
       const property = row.original.inventory;
       const fullAddress = `${property.colonia}, ${property.municipio}, ${property.estado}, #${property.cp}`;

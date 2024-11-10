@@ -1,2 +1,3 @@
-export * from './AnnouncementsTable/AnnouncementsTable';
 export * from './CreateAnnouncementForm';
+export * from './AnnouncementsTable/AnnouncementsColumns';
+export * from './AnnouncementsTable/AnnouncementsTable';

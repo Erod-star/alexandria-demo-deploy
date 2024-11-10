@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'sonner';
 import { ColumnDef, FilterFn, Row } from '@tanstack/react-table';
+import { toast } from 'sonner';
 
 // ? Icons
 import {
@@ -27,8 +27,8 @@ import {
 // ? Hooks
 import { useInventoryMutations } from '../../hooks';
 
-// ? Helpers
-import { formatToMxn } from '@/helpers';
+// ? Utils
+import { formatToMxn } from '@/lib/utils';
 
 // ? Types
 import type { Inventory } from '../../types';

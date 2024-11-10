@@ -95,6 +95,8 @@ export const CreateAnnouncementForm = ({
     };
 
     await createMutation.mutateAsync(payload);
+    toast.info('Serás redirigido en un momento');
+    setTimeout(() => navigate('/publicaciones'), 2000);
   };
 
   return (

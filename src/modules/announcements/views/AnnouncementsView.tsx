@@ -6,7 +6,7 @@ import {
   CardTitle,
   TableSkeleton,
 } from '@/components';
-// import { AnnouncementsTable } from '../components';
+import { AnnouncementsTable, announcementColumns } from '../components';
 
 // ? Hooks
 import { useAnnouncements } from '../hooks';
@@ -18,17 +18,17 @@ const AnnouncementsView = () => {
     <div className="flex h-full">
       <Card className="flex-grow h-full border-none overflow-x-scroll">
         <CardHeader className="flex-row items-center justify-between">
-          <CardTitle>Publicaciones</CardTitle>
+          <CardTitle className='py-2'>Publicaciones</CardTitle>
         </CardHeader>
 
         <CardContent className="w-screen md:w-auto md:overflow-scroll">
           {isLoading ? (
             <TableSkeleton amountOfFilters={0} />
           ) : (
-            // <AnnouncementsTable />
-            announcements.map(({ announcementId }) => (
-              <p key={announcementId}>{announcementId}</p>
-            ))
+            <AnnouncementsTable
+              columns={announcementColumns}
+              data={announcements}
+            />
           )}
         </CardContent>
       </Card>

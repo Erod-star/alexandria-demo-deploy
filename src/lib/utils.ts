@@ -15,3 +15,11 @@ export function setTimeToADate(date: Date, time: string): Date {
   const [hours, minutes] = time.split(':').map(Number);
   return setTime(date, { hours, minutes });
 }
+
+// ? Currency
+export const formatToMxn = (value: number): string => {
+  return new Intl.NumberFormat('es-MX', {
+    style: 'currency',
+    currency: 'MXN',
+  }).format(value);
+};

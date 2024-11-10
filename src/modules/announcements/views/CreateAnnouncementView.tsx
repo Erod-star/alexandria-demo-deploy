@@ -1,4 +1,5 @@
 import { useParams } from 'react-router-dom';
+import { withAuthInfo, type WithAuthInfoProps } from '@propelauth/react';
 
 // ? Components
 import { Card, CardHeader, CardContent, CardTitle } from '@/components';
@@ -7,11 +8,13 @@ import { InventoryDetailCard } from '@/modules/inventory/components';
 
 // ? Hooks
 import { useInventory } from '@/modules/inventory/hooks';
+import { useUser } from '@/modules/users/hooks';
 
-const CreateAnnouncementView = () => {
+const CreateAnnouncementView = withAuthInfo(({ user }: WithAuthInfoProps) => {
   const params = useParams();
 
   const { inventory, isLoading } = useInventory({ id: params.id });
+  const { userFromPropelAuthQuery } = useUser({ propelAuthId: user?.userId });
 
   return (
     <div className="flex h-full">
@@ -27,11 +30,15 @@ const CreateAnnouncementView = () => {
             isLoading={isLoading}
           />
 
-          <CreateAnnouncementForm className="col-span-3 max-h-[44rem]" />
+          <CreateAnnouncementForm
+            className="col-span-3 max-h-[44rem]"
+            inventoryId={params.id}
+            userId={userFromPropelAuthQuery.data?.data.user.userId}
+          />
         </CardContent>
       </Card>
     </div>
   );
-};
+});
 
 export default CreateAnnouncementView;

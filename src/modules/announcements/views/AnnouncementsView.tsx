@@ -6,13 +6,13 @@ import {
   CardTitle,
   TableSkeleton,
 } from '@/components';
-import { AnnouncementsTable } from '../components';
+// import { AnnouncementsTable } from '../components';
 
 // ? Hooks
 import { useAnnouncements } from '../hooks';
 
 const AnnouncementsView = () => {
-  const { isLoading } = useAnnouncements();
+  const { announcements, isLoading } = useAnnouncements();
 
   return (
     <div className="flex h-full">
@@ -25,7 +25,10 @@ const AnnouncementsView = () => {
           {isLoading ? (
             <TableSkeleton amountOfFilters={0} />
           ) : (
-            <AnnouncementsTable />
+            // <AnnouncementsTable />
+            announcements.map(({ announcementId }) => (
+              <p key={announcementId}>{announcementId}</p>
+            ))
           )}
         </CardContent>
       </Card>

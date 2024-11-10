@@ -24,11 +24,15 @@ import {
   FormLabel,
   FormMessage,
   Input,
+  ScreenLoadingSpinner,
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from '@/components';
+
+// ? Hooks
+import { useAnnouncementMutations } from '../hooks';
 
 // ? Schemas
 import { createAnnouncementFormSchema } from '../schemas';
@@ -37,13 +41,20 @@ import { createAnnouncementFormSchema } from '../schemas';
 import type { AnnouncementResourceId } from '../schemas';
 
 interface CreateAnnouncementFormProps {
+  inventoryId?: string;
   className?: string;
+  userId?: string;
 }
 
 export const CreateAnnouncementForm = ({
   className,
+  inventoryId,
+  userId,
 }: CreateAnnouncementFormProps) => {
   const navigate = useNavigate();
+  const { createMutation } = useAnnouncementMutations();
+
+  const hasRequestsPending = createMutation.isPending;
 
   const form = useForm<z.infer<typeof createAnnouncementFormSchema>>({
     resolver: zodResolver(createAnnouncementFormSchema),
@@ -74,11 +85,16 @@ export const CreateAnnouncementForm = ({
     });
   };
 
-  const handleSubmit = (
-    values: z.infer<typeof createAnnouncementFormSchema>
-  ): void => {
-    // TODO: Do something with the form values.
-    console.log(values);
+  const handleSubmit = async (
+    formData: z.infer<typeof createAnnouncementFormSchema>
+  ): Promise<void> => {
+    const payload = {
+      inventoryId: inventoryId || 'No inventoryId',
+      userId: userId || 'No userId',
+      ...formData,
+    };
+
+    await createMutation.mutateAsync(payload);
   };
 
   return (
@@ -376,11 +392,23 @@ export const CreateAnnouncementForm = ({
               <Button
                 type="button"
                 variant="secondary"
+                disabled={hasRequestsPending}
                 onClick={() => navigate('/inventario')}
               >
                 Cancelar
               </Button>
-              <Button type="submit">Crear publicación</Button>
+
+              <Button
+                className="min-w-28"
+                disabled={hasRequestsPending}
+                type="submit"
+              >
+                {createMutation.isPending ? (
+                  <ScreenLoadingSpinner className="size-4" />
+                ) : (
+                  'Crear publicación'
+                )}
+              </Button>
             </div>
           </TooltipProvider>
         </form>

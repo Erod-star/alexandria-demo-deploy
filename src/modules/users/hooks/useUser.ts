@@ -1,13 +1,14 @@
 import { useQuery } from '@tanstack/react-query';
 
 // ? Actions
-import { getUserById } from '../actions';
+import { getUserById, getUserByPropelAuthId } from '../actions';
 
 interface UseUserProps {
   id?: string;
+  propelAuthId?: string;
 }
 
-export const useUser = ({ id }: UseUserProps) => {
+export const useUser = ({ id, propelAuthId }: UseUserProps) => {
   const userQuery = useQuery({
     queryKey: ['user', id],
     queryFn: () => getUserById(id),
@@ -17,8 +18,16 @@ export const useUser = ({ id }: UseUserProps) => {
 
   const user = userQuery.data;
 
+  const userFromPropelAuthQuery = useQuery({
+    queryKey: ['userFromPropelAuth', propelAuthId],
+    queryFn: () => getUserByPropelAuthId(propelAuthId),
+    staleTime: 1000 * 60 * 60 * 5, // 5 hours
+    enabled: !!propelAuthId,
+  });
+
   return {
     ...userQuery,
+    userFromPropelAuthQuery,
 
     // ? Properties
     user,

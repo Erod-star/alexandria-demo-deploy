@@ -354,7 +354,7 @@ export const CreateAnnouncementForm = ({
 
               <FormField
                 control={form.control}
-                name="inmueblesLink"
+                name="meliLink"
                 render={({ field }) => (
                   <FormItem className="form-required-field">
                     <FormLabel>Url de la propiedad</FormLabel>
@@ -373,7 +373,11 @@ export const CreateAnnouncementForm = ({
             </div>
 
             <div className="flex justify-end gap-5">
-              <Button type="button" onClick={() => navigate('/inventario')}>
+              <Button
+                type="button"
+                variant="secondary"
+                onClick={() => navigate('/inventario')}
+              >
                 Cancelar
               </Button>
               <Button type="submit">Crear publicación</Button>

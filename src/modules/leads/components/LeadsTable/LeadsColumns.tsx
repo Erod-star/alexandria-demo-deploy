@@ -5,7 +5,7 @@ import { toast } from 'sonner';
 import { Badge, Button } from '@/components';
 
 // ? Types
-import type { Lead } from '../../interfaces';
+import type { Lead } from '../../types';
 import { Mail, Phone } from 'lucide-react';
 
 export const leadsColumns: ColumnDef<Lead>[] = [

@@ -235,7 +235,7 @@ const LeadsFormView = () => {
                       <FormLabel>Id del anuncio</FormLabel>
                       <FormControl>
                         <Input
-                          placeholder="Juan Alberto"
+                          placeholder=""
                           type="text"
                           minLength={2}
                           required

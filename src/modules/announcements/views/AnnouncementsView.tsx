@@ -16,12 +16,12 @@ const AnnouncementsView = () => {
 
   return (
     <div className="flex h-full">
-      <Card className="flex-grow h-full border-none overflow-x-scroll">
+      <Card className="flex-grow h-full border-none">
         <CardHeader className="flex-row items-center justify-between">
-          <CardTitle className='py-2'>Publicaciones</CardTitle>
+          <CardTitle className="py-2">Publicaciones</CardTitle>
         </CardHeader>
 
-        <CardContent className="w-screen md:w-auto md:overflow-scroll">
+        <CardContent className="w-screen md:w-auto">
           {isLoading ? (
             <TableSkeleton amountOfFilters={0} />
           ) : (

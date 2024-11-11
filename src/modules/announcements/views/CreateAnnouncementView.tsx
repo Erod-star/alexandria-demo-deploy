@@ -18,20 +18,20 @@ const CreateAnnouncementView = withAuthInfo(({ user }: WithAuthInfoProps) => {
 
   return (
     <div className="flex h-full">
-      <Card className="flex-grow border-none overflow-x-scroll">
+      <Card className="flex-grow border-none">
         <CardHeader>
           <CardTitle>Creación de nueva publicación</CardTitle>
         </CardHeader>
 
         <CardContent className="grid grid-cols-7 gap-x-5">
           <InventoryDetailCard
-            className="col-span-4 max-h-[44rem]"
+            className="col-span-4 max-h-[40rem]"
             inventory={inventory}
             isLoading={isLoading}
           />
 
           <CreateAnnouncementForm
-            className="col-span-3 max-h-[44rem]"
+            className="col-span-3 max-h-[40rem]"
             inventoryId={params.id}
             userId={userFromPropelAuthQuery.data?.data.user.userId}
           />

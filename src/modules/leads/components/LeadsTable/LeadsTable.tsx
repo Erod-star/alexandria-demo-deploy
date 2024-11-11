@@ -92,7 +92,8 @@ export function LeadsTable<Lead, TValue>({
                   </TableRow>
                   <CollapsibleContent asChild>
                     <LeadsPropertyCollapsible
-                      properties={row.getValue('properties')}
+                      // properties={row.getValue('properties')}
+                      properties={['1', '2', '3']}
                     />
                   </CollapsibleContent>
                 </>

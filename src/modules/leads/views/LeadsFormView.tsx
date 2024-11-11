@@ -1,12 +1,22 @@
 import { useNavigate } from 'react-router-dom';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-
-// ? Hooks
-import { useLeadsForm } from '@/modules/leads/hooks';
 
 // ? Components
 import {
+  defaultCountries,
+  parseCountry,
+  PhoneInput,
+} from 'react-international-phone';
+import {
   Button,
+  Calendar,
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
   Form,
   FormControl,
   FormField,
@@ -14,149 +24,238 @@ import {
   FormLabel,
   FormMessage,
   Input,
-  Separator,
+  LoadingSpinner,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
   Textarea,
 } from '@/components';
 
+// ? Schemas
+import { leadFormSchema } from '../schemas';
+
+// ? Styles
+import 'react-international-phone/style.css';
+import { cn } from '@/lib/utils';
+import { format } from 'date-fns';
+import { CalendarIcon } from 'lucide-react';
+
 const LeadsFormView = () => {
-  const { form, formSchema } = useLeadsForm();
   const navigate = useNavigate();
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
+  const form = useForm<z.infer<typeof leadFormSchema>>({
+    resolver: zodResolver(leadFormSchema),
+    defaultValues: {
+      nombre: '',
+      telefono: '',
+      correo: '',
+      mensaje: '',
+      idAnuncio: '',
+      tipoAnuncio: '',
+      fechaContacto: new Date(),
+    },
+  });
+
+  const countries = defaultCountries.filter((country) => {
+    const { iso2 } = parseCountry(country);
+    return ['mx'].includes(iso2);
+  });
+
+  const onSubmit = (values: z.infer<typeof leadFormSchema>) => {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     console.log(values);
   };
 
   return (
-    <div className="h-full relative">
-      <section className="mb-5 flex justify-between">
-        <h2 className="text-4xl font-bold">Creación de lead</h2>
-      </section>
+    <div className="h-full relative pt-5">
+      <Card className="flex-grow h-full border-none">
+        <CardHeader className="flex-row items-center justify-between">
+          <CardTitle>Creación de nuevo lead</CardTitle>
+        </CardHeader>
 
-      <div className="pb-6">
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-            <div className="flex gap-5">
-              <FormField
-                control={form.control}
-                name="firstName"
-                render={({ field }) => (
-                  <FormItem className="w-1/2">
-                    <FormLabel>Nombre(s)</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Juan Alberto"
-                        type="text"
-                        minLength={2}
-                        required
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="lastName"
-                render={({ field }) => (
-                  <FormItem className="w-1/2">
-                    <FormLabel>Apellidos</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Pérez Rodríguez"
-                        type="text"
-                        minLength={2}
-                        required
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-
-            <div className="flex gap-5">
-              <FormField
-                control={form.control}
-                name="phone"
-                render={({ field }) => (
-                  <FormItem className="w-1/2">
-                    <FormLabel>Teléfono</FormLabel>
-                    <FormControl>
-                      <Input placeholder="000 000 0000" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem className="w-1/2">
-                    <FormLabel>Correo electrónico</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="juan@gmail.com"
-                        type="email"
-                        required
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-
-            <h3 className="text-3xl font-semibold">Propiedades</h3>
-            <Separator className="my-1" />
-
-            <div>
-              <div className="flex gap-5">
-                <div className="w-1/2 space-y-4">
-                  <FormField
-                    control={form.control}
-                    name="propertiesHistory"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Historial de propiedades</FormLabel>
-                        <FormControl>
-                          <Input placeholder="???" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="property"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Propiedad</FormLabel>
-                        <FormControl>
-                          <Input placeholder="???" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
+        <CardContent>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+              <div className="grid grid-cols-4 gap-7">
+                <FormField
+                  control={form.control}
+                  name="nombre"
+                  render={({ field }) => (
+                    <FormItem className="form-required-field col-span-4">
+                      <FormLabel>Nombre completo</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Juan Alberto"
+                          type="text"
+                          minLength={2}
+                          required
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
                 <FormField
                   control={form.control}
-                  name="reason"
+                  name="telefono"
                   render={({ field }) => (
-                    <FormItem className="w-1/2 h-32">
+                    <FormItem className="form-required-field col-span-2">
+                      <FormLabel>Teléfono</FormLabel>
+                      <FormControl>
+                        <PhoneInput
+                          required
+                          defaultCountry="mx"
+                          countries={countries}
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="correo"
+                  render={({ field }) => (
+                    <FormItem className="form-required-field col-span-2">
+                      <FormLabel>Correo electrónico</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="juan@gmail.com"
+                          type="email"
+                          required
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="tipoAnuncio"
+                  render={({ field }) => (
+                    <FormItem className="col-span-2">
+                      <FormLabel>Tipo de anuncio</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Selecciona uno" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectGroup>
+                            <SelectItem value="all">Todas</SelectItem>
+
+                            <SelectLabel>Premium</SelectLabel>
+                            <SelectItem value="Cobranza">Cobranza</SelectItem>
+                            <SelectItem value="Juicio">Juicio</SelectItem>
+                            <SelectItem value="Sentencia">Sentencia</SelectItem>
+                            <SelectItem value="Adjudicadas">
+                              Adjudicadas
+                            </SelectItem>
+
+                            <SelectLabel>Classic</SelectLabel>
+                            <SelectItem value="Altaltium">Altaltium</SelectItem>
+                            <SelectItem value="Preventa">Preventa</SelectItem>
+                            <SelectItem value="Consignación">
+                              Consignación
+                            </SelectItem>
+                            <SelectItem value="Banco">Banco</SelectItem>
+                          </SelectGroup>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="fechaContacto"
+                  render={({ field }) => (
+                    <FormItem className="form-required-field flex flex-col col-span-2">
+                      <FormLabel>Fecha de contacto</FormLabel>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <FormControl>
+                            <Button
+                              variant="outline"
+                              className={cn(
+                                'pl-3 text-left font-normal',
+                                !field.value && 'text-muted-foreground'
+                              )}
+                            >
+                              {field.value ? (
+                                format(field.value, 'PPP')
+                              ) : (
+                                <span>Pick a date</span>
+                              )}
+                              <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                            </Button>
+                          </FormControl>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0" align="start">
+                          <Calendar
+                            mode="single"
+                            selected={field.value}
+                            onSelect={field.onChange}
+                            disabled={(date) =>
+                              date > new Date() || date < new Date('1900-01-01')
+                            }
+                            initialFocus
+                          />
+                        </PopoverContent>
+                      </Popover>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="idAnuncio"
+                  render={({ field }) => (
+                    <FormItem className="form-required-field col-span-2">
+                      <FormLabel>Id del anuncio</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Juan Alberto"
+                          type="text"
+                          minLength={2}
+                          required
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="mensaje"
+                  render={({ field }) => (
+                    <FormItem className="form-required-field col-span-2 h-full">
                       <FormLabel>Motivo</FormLabel>
                       <FormControl>
                         <Textarea
+                          required
                           className="resize-none h-full"
                           placeholder="Este lead fue añadido por..."
                           minLength={10}
@@ -168,110 +267,29 @@ const LeadsFormView = () => {
                   )}
                 />
               </div>
-            </div>
 
-            <h3 className="text-3xl font-semibold">Dirección</h3>
-            <Separator className="my-1" />
-
-            <div className="space-y-5">
-              <div className="flex gap-5">
-                <FormField
-                  control={form.control}
-                  name="streetAndNumber"
-                  render={({ field }) => (
-                    <FormItem className="w-1/2">
-                      <FormLabel>Calle y número</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="Paseo de las rosas #246"
-                          type="text"
-                          required
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="colony"
-                  render={({ field }) => (
-                    <FormItem className="w-1/2">
-                      <FormLabel>Colonia</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="Jardines de la villa"
-                          type="text"
-                          required
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-
-              <div className="flex gap-5">
-                <FormField
-                  control={form.control}
-                  name="city"
-                  render={({ field }) => (
-                    <FormItem className="w-1/2">
-                      <FormLabel>Alcaldia / Municipio</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="Guadalajara"
-                          type="text"
-                          required
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="zipCode"
-                  render={({ field }) => (
-                    <FormItem className="w-1/2">
-                      <FormLabel>Código postal</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="00000"
-                          maxLength={5}
-                          minLength={5}
-                          required
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-            </div>
-
-            <div className="flex justify-end w-full">
-              <div className="flex gap-3">
+              <CardFooter className="pt-6 flex-col-reverse gap-5 items-start justify-end px-0 sm:flex-row">
                 <Button
                   type="button"
                   variant="secondary"
-                  onClick={() => navigate('/leads')}
+                  // disabled={hasRequestsPending}
+                  onClick={() => navigate('/usuarios')}
                 >
                   Cancelar
                 </Button>
 
-                <Button type="submit">Crear lead</Button>
-              </div>
-            </div>
-          </form>
-        </Form>
-      </div>
+                <Button
+                  className="min-w-28"
+                  // disabled={hasRequestsPending}
+                  type="submit"
+                >
+                  {false ? <LoadingSpinner className="size-4" /> : 'Crear lead'}
+                </Button>
+              </CardFooter>
+            </form>
+          </Form>
+        </CardContent>
+      </Card>
     </div>
   );
 };

@@ -13,11 +13,10 @@ export const leadsColumns: ColumnDef<Lead>[] = [
     accessorKey: 'name',
     header: 'Lead',
     cell: ({ row }) => {
-      const { name, since } = row.original;
       return (
         <>
-          <p className="font-semibold text-2xl">{name}</p>
-          <span className="text-sm text-alt-green-300">Lead desde {since}</span>
+          <p className="font-semibold text-2xl">name</p>
+          <span className="text-sm text-alt-green-300">Lead desde since</span>
         </>
       );
     },
@@ -27,7 +26,6 @@ export const leadsColumns: ColumnDef<Lead>[] = [
     accessorKey: 'email',
     header: 'Contacto',
     cell: ({ row }) => {
-      const { email } = row.original;
       return (
         <div className="mt-1">
           <Button
@@ -35,14 +33,14 @@ export const leadsColumns: ColumnDef<Lead>[] = [
             size="sm"
             variant="link"
             onClick={() => {
-              navigator.clipboard.writeText(email);
+              navigator.clipboard.writeText('email');
               toast.info('Correo copiado en el portapapeles', {
                 duration: 1500,
               });
             }}
           >
             <Mail className="size-4 inline-block" />
-            <span className="text-sm">{email}</span>
+            <span className="text-sm">email</span>
           </Button>
 
           <Button
@@ -67,9 +65,8 @@ export const leadsColumns: ColumnDef<Lead>[] = [
     accessorKey: 'reason',
     header: 'Motivo',
     cell: ({ row }) => {
-      const { reason } = row.original;
       return (
-        <Badge className="bg-alt-green-300 text-alt-green-900">{reason}</Badge>
+        <Badge className="bg-alt-green-300 text-alt-green-900">reason</Badge>
       );
     },
   },
@@ -79,10 +76,11 @@ export const leadsColumns: ColumnDef<Lead>[] = [
     header: 'Propiedades',
     cell: ({ row }) => {
       const lead = row.original;
-      if (lead.properties.length === 0) {
-        return <p>Sin propiedades</p>;
-      }
-      return <Button>{lead.properties.length} Propiedades</Button>;
+      // if (lead.properties.length === 0) {
+      //   return <p>Sin propiedades</p>;
+      // }
+      // return <Button>{lead.properties.length} Propiedades</Button>;
+      return <Button>3 Propiedades</Button>;
     },
   },
   {

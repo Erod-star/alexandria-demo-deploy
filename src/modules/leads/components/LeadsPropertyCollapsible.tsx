@@ -4,11 +4,8 @@ import { House } from 'lucide-react';
 // ? Components
 import { TableCell, TableRow } from '@/components';
 
-// ? Types
-import type { Property } from '@/modules/inventory/interfaces';
-
 interface LeadsPropertyCollapsibleProps {
-  properties: Property[];
+  properties: string[];
 }
 
 export const LeadsPropertyCollapsible = ({
@@ -32,17 +29,15 @@ export const LeadsPropertyCollapsible = ({
           </TableRow>
 
           {properties.map((property) => (
-            <TableRow key={property.id}>
+            <TableRow key={property}>
               <TableCell colSpan={2}>
                 <div className="w-full flex items-center gap-3">
                   <House className="size-5" />
-                  <p>{property.name}</p>
+                  <p>{property}</p>
                 </div>
               </TableCell>
 
-              <TableCell className="text-green-400">
-                {property.availability}
-              </TableCell>
+              <TableCell className="text-green-400">{property}</TableCell>
             </TableRow>
           ))}
         </>

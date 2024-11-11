@@ -4,7 +4,8 @@ export interface Lead {
   telefono: string;
   correo: string;
   mensaje: string;
-  idAnuncio: string;
-  tipoAnuncio: string;
   fechaContacto: string;
+  tipoAnuncio: string;
+  idAnuncio: string;
+  announcementId?: string;
 }

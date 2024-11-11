@@ -3,6 +3,14 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
+import { format } from 'date-fns';
+
+// ? Utils
+import { cn } from '@/lib/utils';
+
+// ? Icons
+import { CalendarIcon } from 'lucide-react';
+
 // ? Components
 import {
   defaultCountries,
@@ -38,17 +46,19 @@ import {
   Textarea,
 } from '@/components';
 
+// ? Hooks
+import { useLeadMutations } from '../hooks';
+
 // ? Schemas
 import { leadFormSchema } from '../schemas';
 
 // ? Styles
 import 'react-international-phone/style.css';
-import { cn } from '@/lib/utils';
-import { format } from 'date-fns';
-import { CalendarIcon } from 'lucide-react';
 
 const LeadsFormView = () => {
   const navigate = useNavigate();
+
+  const { createMutation } = useLeadMutations();
 
   const form = useForm<z.infer<typeof leadFormSchema>>({
     resolver: zodResolver(leadFormSchema),
@@ -63,15 +73,23 @@ const LeadsFormView = () => {
     },
   });
 
+  const hasRequestsPending = createMutation.isPending;
+
   const countries = defaultCountries.filter((country) => {
     const { iso2 } = parseCountry(country);
     return ['mx'].includes(iso2);
   });
 
-  const onSubmit = (values: z.infer<typeof leadFormSchema>) => {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
+  const onSubmit = async (formData: z.infer<typeof leadFormSchema>) => {
+    try {
+      await createMutation.mutateAsync({
+        ...formData,
+        fechaContacto: format(formData.fechaContacto, 'yyyy-MM-dd'),
+      });
+      navigate('/leads');
+    } catch (error) {
+      console.error('::LeadsFormView', error);
+    }
   };
 
   return (
@@ -96,6 +114,7 @@ const LeadsFormView = () => {
                           placeholder="Juan Alberto"
                           type="text"
                           minLength={2}
+                          disabled={hasRequestsPending}
                           required
                           {...field}
                         />
@@ -116,6 +135,7 @@ const LeadsFormView = () => {
                           required
                           defaultCountry="mx"
                           countries={countries}
+                          disabled={hasRequestsPending}
                           {...field}
                         />
                       </FormControl>
@@ -134,6 +154,7 @@ const LeadsFormView = () => {
                         <Input
                           placeholder="juan@gmail.com"
                           type="email"
+                          disabled={hasRequestsPending}
                           required
                           {...field}
                         />
@@ -152,6 +173,7 @@ const LeadsFormView = () => {
                       <Select
                         onValueChange={field.onChange}
                         defaultValue={field.value}
+                        disabled={hasRequestsPending}
                       >
                         <FormControl>
                           <SelectTrigger>
@@ -196,6 +218,7 @@ const LeadsFormView = () => {
                           <FormControl>
                             <Button
                               variant="outline"
+                              disabled={hasRequestsPending}
                               className={cn(
                                 'pl-3 text-left font-normal',
                                 !field.value && 'text-muted-foreground'
@@ -235,9 +258,10 @@ const LeadsFormView = () => {
                       <FormLabel>Id del anuncio</FormLabel>
                       <FormControl>
                         <Input
-                          placeholder=""
+                          placeholder="ab627aca"
                           type="text"
                           minLength={2}
+                          disabled={hasRequestsPending}
                           required
                           {...field}
                         />
@@ -259,6 +283,7 @@ const LeadsFormView = () => {
                           className="resize-none h-full"
                           placeholder="Este lead fue añadido por..."
                           minLength={10}
+                          disabled={hasRequestsPending}
                           {...field}
                         />
                       </FormControl>
@@ -272,18 +297,22 @@ const LeadsFormView = () => {
                 <Button
                   type="button"
                   variant="secondary"
-                  // disabled={hasRequestsPending}
-                  onClick={() => navigate('/usuarios')}
+                  disabled={hasRequestsPending}
+                  onClick={() => navigate('/leads')}
                 >
                   Cancelar
                 </Button>
 
                 <Button
                   className="min-w-28"
-                  // disabled={hasRequestsPending}
+                  disabled={hasRequestsPending}
                   type="submit"
                 >
-                  {false ? <LoadingSpinner className="size-4" /> : 'Crear lead'}
+                  {createMutation.isPending ? (
+                    <LoadingSpinner className="size-4" />
+                  ) : (
+                    'Crear lead'
+                  )}
                 </Button>
               </CardFooter>
             </form>

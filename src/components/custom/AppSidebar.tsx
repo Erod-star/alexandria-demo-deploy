@@ -3,7 +3,7 @@ import { Link, NavLink } from 'react-router-dom';
 // ? Icons
 import {
   Calendar,
-  Hand,
+  Contact,
   MailWarning,
   Newspaper,
   Package,
@@ -53,7 +53,7 @@ const menuItems = [
   {
     title: 'Leads',
     to: 'leads',
-    icon: Hand,
+    icon: Contact,
   },
   {
     title: 'Usuarios',

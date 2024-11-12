@@ -6,7 +6,7 @@ import type { FilterFn, Row } from '@tanstack/react-table';
 import {
   ArrowUpDown,
   Building2,
-  Hand,
+  Contact,
   House,
   MapPin,
   MoreHorizontal,
@@ -168,10 +168,8 @@ export const announcementColumns: ColumnDef<Announcement>[] = [
     header: () => <div className="text-center">Leads</div>,
     cell: () => (
       <div className="flex-center">
-        {/* // TODO: Maybe do a custom component for this? */}
         <Button size="icon" className="relative">
-          <Hand />
-          {/* <Contact /> */}
+          <Contact />
           <div className="size-5 bg-red-600 text-white shadow-xl flex-center rounded-full absolute -top-2 -right-2">
             <p className="text-[0.7rem] font-semibold">2</p>
           </div>

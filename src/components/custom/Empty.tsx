@@ -5,10 +5,11 @@ import { cn } from '@/lib/utils';
 import { CircleAlert } from 'lucide-react';
 
 interface EmptyProps {
+  children?: React.ReactNode;
+  className?: string;
   description?: string;
   header?: string;
-  className?: string;
-  children?: React.ReactNode;
+  iconClassName?: string;
 }
 
 export const Empty = ({
@@ -16,17 +17,18 @@ export const Empty = ({
   header = 'Sin resultados',
   className = '',
   children,
+  iconClassName,
 }: EmptyProps) => {
   return (
     <div className="flex-center">
       <div
         className={cn(
-          `m-8 text-center p-12 rounded-sm bg-gray-600 border border-white`,
+          'text-center p-12 rounded-sm bg-gray-600 border border-white',
           className
         )}
       >
         <div className="flex-center mb-2">
-          <CircleAlert className="size-[100px]" />
+          <CircleAlert className={cn('size-[100px]', iconClassName)} />
         </div>
         <h2 className="text-2xl font-bold">{header}</h2>
         {children ? children : <p>{description}</p>}

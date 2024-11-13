@@ -13,7 +13,7 @@ import RootLayout from '@/layouts/RootLayout';
 // Announcements
 import AnnouncementsView from '@/modules/announcements/views/AnnouncementsView';
 import CreateAnnouncementView from '@/modules/announcements/views/CreateAnnouncementView';
-import ContactView from '@/modules/announcements/views/ContactView';
+import ContactView from '@/modules/interactions/views/ContactView';
 
 // Calendar
 import CalendarView from '@/modules/calendar/views/CalendarView';

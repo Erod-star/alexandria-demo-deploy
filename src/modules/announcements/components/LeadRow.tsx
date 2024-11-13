@@ -47,7 +47,10 @@ export const LeadRow = ({ lead }: LeadRowProps) => {
           <TableCell>{lead.correo}</TableCell>
           <TableCell>Por contactar</TableCell>
           <TableCell>
-            <Button size="icon" onClick={() => navigate('/')}>
+            <Button
+              size="icon"
+              onClick={() => navigate(`contact/${lead.leadId}`)}
+            >
               <Mail />
             </Button>
           </TableCell>

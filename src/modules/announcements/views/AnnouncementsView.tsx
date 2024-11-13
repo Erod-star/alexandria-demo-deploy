@@ -27,7 +27,7 @@ const AnnouncementsView = () => {
           ) : (
             <AnnouncementsTable
               columns={announcementColumns}
-              data={announcements}
+              data={announcements as any}
             />
           )}
         </CardContent>

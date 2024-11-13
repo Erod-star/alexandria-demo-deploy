@@ -1,6 +1,6 @@
 // ? Types
+import type { Lead } from '@/modules/leads/types';
 import type { Inventory } from '@/modules/inventory/types';
-import type { User } from '@/modules/users/types';
 
 export interface Announcement {
   announcementId: string;
@@ -11,7 +11,7 @@ export interface Announcement {
   meliId: string;
   meliLink: string;
   inventory: Inventory;
-  user: User;
+  leads: Lead[];
   createdAt?: string | Date;
   updatedAt?: string | Date;
   deletedAt?: string | Date;

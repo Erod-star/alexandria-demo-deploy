@@ -5,7 +5,7 @@ import type { AlexandriaApiSuccessResponse } from '@/modules/global/types';
 import type { Announcement } from '../types';
 
 export interface PostAnnouncementPayload
-  extends Omit<Announcement, 'announcementId' | 'inventory' | 'user'> {
+  extends Omit<Announcement, 'announcementId' | 'inventory' | 'leads'> {
   inventoryId: string;
   userId: string;
 }

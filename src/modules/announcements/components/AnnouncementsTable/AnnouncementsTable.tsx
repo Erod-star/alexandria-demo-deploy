@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 import {
   ColumnDef,
@@ -10,9 +10,12 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
+  ExpandedState,
+  getExpandedRowModel,
 } from '@tanstack/react-table';
 
 // ? Components
+import { LeadRow } from '../LeadRow';
 import {
   Button,
   Label,
@@ -25,23 +28,33 @@ import {
   TableRow,
 } from '@/components';
 
-interface AnnouncementsTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[];
-  data: TData[];
+// ? Types
+import { Lead } from '@/modules/leads/types';
+
+interface LeadData {
+  leads: Lead[];
 }
 
-export function AnnouncementsTable<TData, TValue>({
+interface AnnouncementsTableProps<TData extends LeadData, TValue> {
+  columns: ColumnDef<TData, TValue>[];
+  data: [];
+}
+
+export function AnnouncementsTable<TData extends LeadData, TValue>({
   columns,
   data,
 }: AnnouncementsTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [expanded, setExpanded] = useState<ExpandedState>({});
 
   const table = useReactTable({
     data,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
+    onExpandedChange: setExpanded,
+    getExpandedRowModel: getExpandedRowModel(),
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
@@ -49,6 +62,7 @@ export function AnnouncementsTable<TData, TValue>({
     state: {
       sorting,
       columnFilters,
+      expanded,
     },
   });
 
@@ -94,22 +108,35 @@ export function AnnouncementsTable<TData, TValue>({
                 </TableRow>
               ))}
             </TableHeader>
+
             <TableBody>
               {table.getRowModel().rows?.length ? (
                 table.getRowModel().rows.map((row) => (
-                  <TableRow
-                    key={row.id}
-                    data-state={row.getIsSelected() && 'selected'}
-                  >
-                    {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id}>
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )}
-                      </TableCell>
-                    ))}
-                  </TableRow>
+                  <React.Fragment key={row.id}>
+                    <TableRow
+                      key={row.id}
+                      data-state={row.getIsSelected() && 'selected'}
+                    >
+                      {row.getVisibleCells().map((cell) => (
+                        <TableCell key={cell.id}>
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+
+                    {row.getIsExpanded() && (
+                      <TableRow>
+                        <TableCell colSpan={columns.length} className="h-24">
+                          {row.original.leads.map((lead: Lead) => (
+                            <LeadRow key={lead.leadId} lead={lead} />
+                          ))}
+                        </TableCell>
+                      </TableRow>
+                    )}
+                  </React.Fragment>
                 ))
               ) : (
                 <TableRow>

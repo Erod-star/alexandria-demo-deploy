@@ -166,16 +166,27 @@ export const announcementColumns: ColumnDef<Announcement>[] = [
   {
     accessorKey: 'leads',
     header: () => <div className="text-center">Leads</div>,
-    cell: () => (
-      <div className="flex-center">
-        <Button size="icon" className="relative">
-          <Contact />
-          <div className="size-5 bg-red-600 text-white shadow-xl flex-center rounded-full absolute -top-2 -right-2">
-            <p className="text-[0.7rem] font-semibold">2</p>
-          </div>
-        </Button>
-      </div>
-    ),
+    cell: ({ row }) => {
+      const { leads } = row.original;
+      const hasLeads = leads.length > 0;
+      return (
+        <div className="flex-center">
+          <Button
+            disabled={!hasLeads}
+            size="icon"
+            className="relative"
+            onClick={() => row.toggleExpanded()}
+          >
+            <Contact />
+            {hasLeads && (
+              <div className="size-5 bg-red-600 text-white shadow-xl flex-center rounded-full absolute -top-2 -right-2">
+                <p className="text-[0.7rem] font-semibold">{leads.length}</p>
+              </div>
+            )}
+          </Button>
+        </div>
+      );
+    },
   },
   {
     id: 'acciones',

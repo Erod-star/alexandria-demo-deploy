@@ -22,11 +22,13 @@ import {
 // ? Schema
 import { contactFormSchema } from '../schema';
 
-interface ContactFormProps {
+interface CreateInteractionFormProps {
   className?: string;
 }
 
-export const ContactForm = ({ className }: ContactFormProps) => {
+export const CreateInteractionForm = ({
+  className,
+}: CreateInteractionFormProps) => {
   const form = useForm<z.infer<typeof contactFormSchema>>({
     resolver: zodResolver(contactFormSchema),
     defaultValues: {

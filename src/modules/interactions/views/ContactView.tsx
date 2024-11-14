@@ -9,14 +9,17 @@ import {
   Empty,
   Separator,
 } from '@/components';
-import { ContactForm } from '@/modules/interactions/components';
+import { CreateInteractionForm } from '@/modules/interactions/components';
 
 // ? Hooks
 import { useLead } from '@/modules/leads/hooks';
 
 export const ContactView = () => {
   const params = useParams<{ id: string }>();
-  const { lead, relatedInventories: leadInventories } = useLead({
+  const {
+    lead,
+    // relatedInventories: leadInventories
+  } = useLead({
     id: params.id,
   });
 
@@ -100,7 +103,7 @@ export const ContactView = () => {
               ))} */}
             </div>
 
-            <ContactForm className="col-span-6 border p-4 rounded-lg space-y-4" />
+            <CreateInteractionForm className="col-span-6 border p-4 rounded-lg space-y-4" />
           </div>
         </CardContent>
       </Card>

@@ -14,7 +14,7 @@ const CreateAnnouncementView = withAuthInfo(({ user }: WithAuthInfoProps) => {
   const params = useParams();
 
   const { inventory, isLoading } = useInventory({ id: params.id });
-  const { userFromPropelAuthQuery } = useUser({ propelAuthId: user?.userId });
+  const { currentUserId } = useUser({ propelAuthId: user?.userId });
 
   return (
     <div className="flex h-full">
@@ -33,7 +33,7 @@ const CreateAnnouncementView = withAuthInfo(({ user }: WithAuthInfoProps) => {
           <CreateAnnouncementForm
             className="col-span-3 max-h-[40rem]"
             inventoryId={params.id}
-            userId={userFromPropelAuthQuery.data?.data.user.userId}
+            userId={currentUserId}
           />
         </CardContent>
       </Card>

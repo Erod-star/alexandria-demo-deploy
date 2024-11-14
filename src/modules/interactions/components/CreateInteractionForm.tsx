@@ -29,27 +29,23 @@ import {
 } from '@/components';
 
 // ? Hooks
-import { useInteractionMutations } from '../hooks/useInteractionMutation';
+import { useInteractionMutations } from '../hooks';
 
 // ? Schema
 import { contactFormSchema } from '../schema';
-import { useUser } from '@/modules/users/hooks';
 
 interface CreateInteractionFormProps {
   className?: string;
   leadId?: string;
-  userPropelAuthId?: string;
+  userId?: string;
 }
 
 export const CreateInteractionForm = ({
   className,
   leadId,
-  userPropelAuthId,
+  userId,
 }: CreateInteractionFormProps) => {
   const { createMutation } = useInteractionMutations();
-  const { userFromPropelAuthQuery } = useUser({
-    propelAuthId: userPropelAuthId,
-  });
 
   const form = useForm<z.infer<typeof contactFormSchema>>({
     resolver: zodResolver(contactFormSchema),
@@ -70,7 +66,7 @@ export const CreateInteractionForm = ({
       interactionStatus: formData.interactionStatus === 'si',
       interactionDuration: 0,
       leadId: leadId || 'No lead id!',
-      userId: userFromPropelAuthQuery.data?.data.user.userId || 'No user id!',
+      userId: userId || 'No user id!',
     });
   };
 

@@ -1,4 +1,5 @@
 import { useParams } from 'react-router-dom';
+import { withAuthInfo, WithAuthInfoProps } from '@propelauth/react';
 
 // ? Components
 import {
@@ -9,19 +10,30 @@ import {
   Empty,
   Separator,
 } from '@/components';
-import { CreateInteractionForm } from '@/modules/interactions/components';
+import {
+  CreateInteractionForm,
+  PreviousInteractions,
+} from '@/modules/interactions/components';
 
 // ? Hooks
+import { useInteractions } from '../hooks';
 import { useLead } from '@/modules/leads/hooks';
-import { withAuthInfo, WithAuthInfoProps } from '@propelauth/react';
+import { useUser } from '@/modules/users/hooks';
 
-export const ContactView = withAuthInfo((props: WithAuthInfoProps) => {
+export const ContactView = withAuthInfo(({ user }: WithAuthInfoProps) => {
   const params = useParams<{ id: string }>();
-  const {
-    lead,
-    // relatedInventories: leadInventories
-  } = useLead({
+
+  const { lead } = useLead({
     id: params.id,
+  });
+
+  const { currentUserId } = useUser({
+    propelAuthId: user?.userId,
+  });
+
+  const { interactions } = useInteractions({
+    leadId: lead?.leadId,
+    userId: currentUserId,
   });
 
   return (
@@ -33,7 +45,7 @@ export const ContactView = withAuthInfo((props: WithAuthInfoProps) => {
 
         <CardContent className="w-screen md:w-auto">
           <div className="grid grid-cols-6 gap-5 relative">
-            <div className="col-span-3 grid grid-cols-6 gap-y-4 border p-4 rounded-lg">
+            <div className="col-span-2 grid grid-cols-6 gap-y-4 border p-4 rounded-lg">
               <div className="col-span-6">
                 <h3 className="text-2xl text-alt-green-300 font-semibold">
                   Lead
@@ -67,25 +79,18 @@ export const ContactView = withAuthInfo((props: WithAuthInfoProps) => {
 
               <Separator className="col-span-6 mt-3" />
 
-              <div className="col-span-6 space-y-5 pb-5">
-                <h3 className="text-2xl text-alt-green-300 font-semibold">
-                  Contactos previos
-                </h3>
-
-                <Empty
-                  iconClassName="size-10"
-                  description="Aún no hay contactos previos con este lead"
-                />
+              <div className="col-span-6">
+                <PreviousInteractions interactions={interactions} />
               </div>
             </div>
 
-            <div className="col-span-3 border p-4 rounded-lg space-y-5">
+            <div className="col-span-4 border p-4 rounded-lg space-y-5">
               <h3 className="text-2xl text-alt-green-300 font-semibold">
                 Historial de conversaciones
               </h3>
 
               <Empty
-                className="h-[20rem] flex-center flex-col"
+                className="h-[27rem] flex-center flex-col"
                 iconClassName="size-10"
                 description="Aún no hay un historico de conversaciones con este lead"
               />
@@ -106,7 +111,7 @@ export const ContactView = withAuthInfo((props: WithAuthInfoProps) => {
 
             <CreateInteractionForm
               className="col-span-6 border p-4 rounded-lg space-y-4"
-              userPropelAuthId={props.user?.userId}
+              userId={currentUserId}
               leadId={lead?.leadId}
             />
           </div>

@@ -25,11 +25,14 @@ export const useUser = ({ id, propelAuthId }: UseUserProps) => {
     enabled: !!propelAuthId,
   });
 
+  const currentUserId = userFromPropelAuthQuery.data?.data.user.userId;
+
   return {
     ...userQuery,
     userFromPropelAuthQuery,
 
     // ? Properties
     user,
+    currentUserId,
   };
 };

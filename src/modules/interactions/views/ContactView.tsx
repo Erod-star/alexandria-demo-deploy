@@ -13,8 +13,9 @@ import { CreateInteractionForm } from '@/modules/interactions/components';
 
 // ? Hooks
 import { useLead } from '@/modules/leads/hooks';
+import { withAuthInfo, WithAuthInfoProps } from '@propelauth/react';
 
-export const ContactView = () => {
+export const ContactView = withAuthInfo((props: WithAuthInfoProps) => {
   const params = useParams<{ id: string }>();
   const {
     lead,
@@ -103,12 +104,16 @@ export const ContactView = () => {
               ))} */}
             </div>
 
-            <CreateInteractionForm className="col-span-6 border p-4 rounded-lg space-y-4" />
+            <CreateInteractionForm
+              className="col-span-6 border p-4 rounded-lg space-y-4"
+              userPropelAuthId={props.user?.userId}
+              leadId={lead?.leadId}
+            />
           </div>
         </CardContent>
       </Card>
     </div>
   );
-};
+});
 
 export default ContactView;

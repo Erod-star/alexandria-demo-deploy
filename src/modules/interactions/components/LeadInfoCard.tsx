@@ -1,25 +1,26 @@
+// ? Utils
+import { cn } from '@/lib/utils';
+
 // ? Components
-import { Separator, Skeleton } from '@/components';
-import { PreviousInteractions } from './PreviousInteractions';
+import { Skeleton } from '@/components';
 
 // ? Types
-import type { Interaction } from '../types';
 import type { Lead } from '@/modules/leads/types';
 
 interface LeadIteracionsCardProps {
   lead?: Lead;
-  interactions: Interaction[];
   isLoading: boolean;
+  className?: string;
 }
 
 export const LeadIteracionsCard = ({
-  interactions,
   lead,
   isLoading,
+  className,
 }: LeadIteracionsCardProps) => {
   return (
-    <div className="col-span-2 grid grid-cols-6 gap-4 border p-4 rounded-lg">
-      <div className="col-span-6">
+    <div className={cn('border p-4 rounded-lg space-y-4', className)}>
+      <div>
         <h3 className="text-2xl text-alt-green-300 font-semibold">Lead</h3>
         {isLoading ? (
           <Skeleton className="w-60 h-6 mt-1" />
@@ -28,7 +29,7 @@ export const LeadIteracionsCard = ({
         )}
       </div>
 
-      <div className="col-span-3">
+      <div>
         <p className="text-alt-green-300 font-semibold">Correo</p>
         {isLoading ? (
           <Skeleton className="w-full h-6 mt-1" />
@@ -37,7 +38,7 @@ export const LeadIteracionsCard = ({
         )}
       </div>
 
-      <div className="col-span-3">
+      <div>
         <p className="text-alt-green-300 font-semibold">Telefono</p>
         {isLoading ? (
           <Skeleton className="w-full h-6 mt-1" />
@@ -46,7 +47,7 @@ export const LeadIteracionsCard = ({
         )}
       </div>
 
-      <div className="col-span-3">
+      <div>
         <p className="text-alt-green-300 font-semibold">Último contacto</p>
         {isLoading ? (
           <Skeleton className="w-full h-6 mt-1" />
@@ -55,22 +56,13 @@ export const LeadIteracionsCard = ({
         )}
       </div>
 
-      <div className="col-span-3">
+      <div>
         <p className="text-alt-green-300 font-semibold">Medio de contacto</p>
         {isLoading ? (
           <Skeleton className="w-full h-6 mt-1" />
         ) : (
           <span>Whatsapp</span>
         )}
-      </div>
-
-      <Separator className="col-span-6 mt-3" />
-
-      <div className="col-span-6">
-        <PreviousInteractions
-          interactions={interactions}
-          isLoading={isLoading}
-        />
       </div>
     </div>
   );

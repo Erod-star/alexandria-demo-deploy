@@ -138,7 +138,7 @@ export const inventoryColumns: ColumnDef<Inventory>[] = [
             )}
 
             <Button
-              className="p-0 h-6 text-gray-300 max-w-[16rem] flex justify-start hover:text-alt-green-300"
+              className="p-0 h-6 text-gray-300 max-w-[16rem] flex justify-start overflow-hidden hover:text-alt-green-300"
               variant="link"
               onClick={() => {
                 navigator.clipboard.writeText(fullAddress);
@@ -147,7 +147,7 @@ export const inventoryColumns: ColumnDef<Inventory>[] = [
                 });
               }}
             >
-              <p className="overflow-hidden truncate">{fullAddress}</p>
+              <p className="truncate">{fullAddress}</p>
             </Button>
           </div>
         </div>

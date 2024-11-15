@@ -184,7 +184,7 @@ export const CreateInteractionForm = ({
             name="nextContactDate"
             render={({ field }) => (
               <FormItem className="form-required-field flex flex-col">
-                <FormLabel>Fecha de contacto</FormLabel>
+                <FormLabel>Fecha de próximo contacto</FormLabel>
                 <Popover>
                   <PopoverTrigger asChild>
                     <FormControl>

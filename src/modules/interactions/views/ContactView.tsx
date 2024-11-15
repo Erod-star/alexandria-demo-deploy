@@ -2,12 +2,13 @@ import { useParams } from 'react-router-dom';
 import { withAuthInfo, WithAuthInfoProps } from '@propelauth/react';
 
 // ? Components
-import { Card, CardContent, CardHeader, CardTitle, Empty } from '@/components';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components';
 import {
   announcementWithInventoriesColumns,
   AnnouncementWithInventoriesTable,
   CreateInteractionForm,
   LeadIteracionsCard,
+  PreviousInteractions,
 } from '@/modules/interactions/components';
 
 // ? Hooks
@@ -41,20 +42,15 @@ export const ContactView = withAuthInfo(({ user }: WithAuthInfoProps) => {
         <CardContent className="w-screen md:w-auto">
           <div className="grid grid-cols-6 gap-5 relative">
             <LeadIteracionsCard
-              lead={lead}
-              interactions={interactions}
+              className="col-span-2"
               isLoading={isLoading}
+              lead={lead}
             />
 
             <div className="col-span-4 border p-4 rounded-lg space-y-5">
-              <h3 className="text-2xl text-alt-green-300 font-semibold">
-                Historial de conversaciones
-              </h3>
-
-              <Empty
-                className="h-[25rem] flex-center flex-col"
-                iconClassName="size-10"
-                description="Aún no hay un historico de conversaciones con este lead"
+              <PreviousInteractions
+                interactions={interactions}
+                isLoading={isLoading}
               />
             </div>
 
@@ -63,13 +59,11 @@ export const ContactView = withAuthInfo(({ user }: WithAuthInfoProps) => {
                 Propiedades de interes del lead
               </h3>
 
-              {lead?.announcements ? (
+              {lead?.announcements && (
                 <AnnouncementWithInventoriesTable
                   data={lead.announcements as any}
                   columns={announcementWithInventoriesColumns}
                 />
-              ) : (
-                <p>No data</p>
               )}
             </div>
 

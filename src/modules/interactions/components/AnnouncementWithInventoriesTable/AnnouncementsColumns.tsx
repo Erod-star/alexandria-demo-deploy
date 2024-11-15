@@ -1,16 +1,14 @@
 import { ColumnDef } from '@tanstack/react-table';
 import { toast } from 'sonner';
+
 import type { FilterFn, Row } from '@tanstack/react-table';
 
 // ? Icons
-import { ArrowUpDown, Building2, House, MapPin, Package } from 'lucide-react';
+import { ArrowUpDown, Building2, House, Info, MapPin } from 'lucide-react';
 
 // ? Components
 import { HandleImages } from '@/modules/inventory/components';
-import { Badge, Button } from '@/components';
-
-// ? Utils
-import { formatToMxn } from '@/lib/utils';
+import { Button } from '@/components';
 
 // ? Types
 import type { Announcement } from '@/modules/announcements/types';
@@ -101,7 +99,7 @@ export const announcementWithInventoriesColumns: ColumnDef<Announcement>[] = [
             )}
 
             <Button
-              className="p-0 h-6 text-gray-300 flex justify-start hover:text-alt-green-300"
+              className="p-0 h-6 text-gray-300 flex justify-start overflow-hidden hover:text-alt-green-300"
               variant="link"
               onClick={() => {
                 navigator.clipboard.writeText(fullAddress);
@@ -110,7 +108,7 @@ export const announcementWithInventoriesColumns: ColumnDef<Announcement>[] = [
                 });
               }}
             >
-              <p className="overflow-hidden truncate">{fullAddress}</p>
+              <p className="truncate">{fullAddress}</p>
             </Button>
           </div>
         </div>
@@ -118,32 +116,40 @@ export const announcementWithInventoriesColumns: ColumnDef<Announcement>[] = [
     },
   },
   {
-    accessorKey: 'inventory.etapa',
-    header: () => <div className="text-center">Estado de venta</div>,
+    accessorKey: 'proppitId',
+    header: () => 'Proppit',
     cell: ({ row }) => {
-      const { inventory } = row.original;
+      const { proppitId } = row.original;
       return (
-        <div className="flex-center">
-          <Badge variant="altaltium" className="text-sm font-semibold">
-            {inventory.etapa || 'Sin etapa'}
-          </Badge>
+        <div className="flex justify-start text-start flex-col">
+          <p className="text-white font-semibold">{proppitId}</p>
+          <p>Vinculo a la propiedad</p>
         </div>
       );
     },
   },
   {
-    accessorKey: 'inventory.valorAproximado',
-    header: () => <div className="text-center">Valor aproximado</div>,
+    accessorKey: 'inmueblesId',
+    header: () => 'Inmuebles',
     cell: ({ row }) => {
-      const { inventory } = row.original;
-
+      const { inmueblesId } = row.original;
       return (
-        <div className="flex-center">
-          <p className="text-lg font-semibold">
-            {inventory.valorAproximado
-              ? formatToMxn(inventory.valorAproximado)
-              : 'Sin definir'}
-          </p>
+        <div className="flex justify-start text-start flex-col">
+          <p className="text-white font-semibold">{inmueblesId}</p>
+          <p>Vinculo a la propiedad</p>
+        </div>
+      );
+    },
+  },
+  {
+    accessorKey: 'meliId',
+    header: () => 'Mercado libre',
+    cell: ({ row }) => {
+      const { meliId } = row.original;
+      return (
+        <div className="flex justify-start text-start flex-col">
+          <p className="text-white font-semibold">{meliId}</p>
+          <p>Vinculo a la propiedad</p>
         </div>
       );
     },
@@ -161,7 +167,7 @@ export const announcementWithInventoriesColumns: ColumnDef<Announcement>[] = [
             className="relative"
             onClick={() => row.toggleExpanded()}
           >
-            <Package />
+            <Info />
           </Button>
         </div>
       );

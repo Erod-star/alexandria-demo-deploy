@@ -54,7 +54,7 @@ export const router = createBrowserRouter(
         <Route path="publicaciones">
           <Route index element={<AnnouncementsView />} />
           <Route path="nueva/:id" element={<CreateAnnouncementView />} />
-          <Route path="contact/:id" element={<ContactView />} />
+          <Route path="contact/:leadId" element={<ContactView />} />
         </Route>
 
         <Route path="peticiones">

@@ -11,6 +11,8 @@ import {
   Separator,
 } from '@/components';
 import {
+  announcementWithInventoriesColumns,
+  AnnouncementWithInventoriesTable,
   CreateInteractionForm,
   PreviousInteractions,
 } from '@/modules/interactions/components';
@@ -21,10 +23,10 @@ import { useLead } from '@/modules/leads/hooks';
 import { useUser } from '@/modules/users/hooks';
 
 export const ContactView = withAuthInfo(({ user }: WithAuthInfoProps) => {
-  const params = useParams<{ id: string }>();
+  const params = useParams<{ leadId: string }>();
 
   const { lead } = useLead({
-    id: params.id,
+    id: params.leadId,
   });
 
   const { currentUserId } = useUser({
@@ -90,7 +92,7 @@ export const ContactView = withAuthInfo(({ user }: WithAuthInfoProps) => {
               </h3>
 
               <Empty
-                className="h-[27rem] flex-center flex-col"
+                className="h-[25rem] flex-center flex-col"
                 iconClassName="size-10"
                 description="Aún no hay un historico de conversaciones con este lead"
               />
@@ -107,6 +109,15 @@ export const ContactView = withAuthInfo(({ user }: WithAuthInfoProps) => {
                   inventory={inventory}
                 />
               ))} */}
+
+              {lead?.announcements ? (
+                <AnnouncementWithInventoriesTable
+                  data={lead.announcements as any}
+                  columns={announcementWithInventoriesColumns}
+                />
+              ) : (
+                <p>No data</p>
+              )}
             </div>
 
             <CreateInteractionForm

@@ -93,10 +93,7 @@ export const InventoryDetailCard = ({
           {/* // ? Direccion */}
           <div className="col-span-6 overflow-hidden">
             <p className="text-alt-green-300">Calle y número</p>
-            <span className="overflow-hidden truncate">
-              Texto exageradamente largo para validar que la clase sea buena
-            </span>
-            {/* <span className="truncate">{inventory.calleYNumero}</span> */}
+            <span className="truncate">{inventory.calleYNumero}</span>
           </div>
 
           <div className="col-span-4">

@@ -30,6 +30,7 @@ import type { User } from '@/modules/users/types';
 const customFilterFn: FilterFn<User> = (
   row: Row<User>,
   _: string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   filterValue: any
 ) => {
   filterValue = filterValue.toLowerCase();

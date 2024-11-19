@@ -36,6 +36,7 @@ export const createEvent = async (
     const { data } = await googleApi.post('', JSON.stringify(event));
     return data;
   } catch (error) {
+    console.error('::Calendar', error);
     throw new Error('⚠️ ¡Error al crear el evento!');
   }
 };

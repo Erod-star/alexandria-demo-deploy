@@ -18,7 +18,7 @@ export const useAnnouncements = () => {
     if (announcementsQuery.isError) {
       toast.error('¡Hubo un error al obtener las publicaciones!');
     }
-  }, [announcementsQuery.isError]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [announcementsQuery.isError]);
 
   return {
     ...announcementsQuery,

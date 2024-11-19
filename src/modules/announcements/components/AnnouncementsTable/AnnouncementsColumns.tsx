@@ -32,6 +32,7 @@ import type { Announcement } from '../../types';
 const customFilterFn: FilterFn<Announcement> = (
   row: Row<Announcement>,
   _: string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   filterValue: any
 ) => {
   filterValue = filterValue.toLowerCase();

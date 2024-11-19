@@ -109,7 +109,8 @@ export const CreateInteractionForm = ({
       startTime = currentTime;
       setItem(LocalStorageKeys.TIMER_START, startTime.toString());
     }
-  }, []);
+  }, []); //eslint-disable-line react-hooks/exhaustive-deps
+
   return (
     <div className={cn('', className)}>
       <h3 className="text-2xl text-alt-green-300 font-semibold">

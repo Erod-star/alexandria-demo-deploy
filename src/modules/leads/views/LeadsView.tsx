@@ -37,6 +37,7 @@ function LeadsView() {
           {isLoading ? (
             <TableSkeleton amountOfFilters={0} />
           ) : (
+            //  eslint-disable-next-line @typescript-eslint/no-explicit-any
             <LeadsTable data={leads as any} columns={leadsColumns as any} />
           )}
         </CardContent>

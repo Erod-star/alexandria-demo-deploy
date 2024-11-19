@@ -21,7 +21,7 @@ const App = withAuthInfo((props: WithAuthInfoProps) => {
     if (props.accessToken) {
       setItem(LocalStorageKeys.AUTH_TOKEN, props.accessToken);
     }
-  }, [props]);
+  }, [props]); //eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <>

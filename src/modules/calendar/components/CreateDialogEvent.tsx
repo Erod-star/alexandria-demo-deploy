@@ -45,6 +45,7 @@ interface CreateDialogEventProps {
 }
 
 export const CreateDialogEvent = ({ disabled }: CreateDialogEventProps) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { form, formSchema } = useCalendarEventForm();
   const { createMutation } = useEventMutations();
   const { mutateAsync, isPending } = createMutation;

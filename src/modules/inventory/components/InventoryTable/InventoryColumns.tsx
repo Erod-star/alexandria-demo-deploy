@@ -35,6 +35,7 @@ import type { Inventory } from '../../types';
 const customFilterFn: FilterFn<Inventory> = (
   row: Row<Inventory>,
   _: string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   filterValue: any
 ) => {
   filterValue = filterValue.toLowerCase();
@@ -53,6 +54,7 @@ const customFilterFn: FilterFn<Inventory> = (
 const detalleFilterFn: FilterFn<Inventory> = (
   row: Row<Inventory>,
   _: string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   filterValue: any
 ) => {
   if (filterValue === null) return true;

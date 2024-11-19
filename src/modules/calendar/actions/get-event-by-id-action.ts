@@ -61,9 +61,9 @@ export const getEventById = async (eventId: string) => {
     const { data } = await googleApi.get<GetGoogleCalendarEventByIdResponse>(
       `${eventId}`
     );
-    console.log(':;data', data);
     return data;
   } catch (error) {
+    console.error('::Calendar', error);
     throw new Error('⚠️ Error obteniendo este evento');
   }
 };

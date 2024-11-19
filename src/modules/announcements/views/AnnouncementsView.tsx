@@ -27,6 +27,7 @@ const AnnouncementsView = () => {
           ) : (
             <AnnouncementsTable
               columns={announcementColumns}
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
               data={announcements as any}
             />
           )}

@@ -61,6 +61,7 @@ export const ContactView = withAuthInfo(({ user }: WithAuthInfoProps) => {
 
               {lead?.announcements && (
                 <AnnouncementWithInventoriesTable
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
                   data={lead.announcements as any}
                   columns={announcementWithInventoriesColumns}
                 />

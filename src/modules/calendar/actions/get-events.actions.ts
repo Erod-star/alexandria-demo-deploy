@@ -39,6 +39,7 @@ export const getGoogleEvents =
       );
       return data;
     } catch (error) {
+      console.error('::Calendar', error);
       throw new Error('⚠️ Error obteniendo eventos de Google Calendar');
     }
   };

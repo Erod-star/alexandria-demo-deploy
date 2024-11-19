@@ -50,6 +50,7 @@ export const ModifyEventDialog = () => {
   } = useCalendarStore();
 
   const today = new Date();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { form, formSchema } = useCalendarEventForm({
     summary: selectedEvent?.summary || '',
     description: selectedEvent?.description || '',

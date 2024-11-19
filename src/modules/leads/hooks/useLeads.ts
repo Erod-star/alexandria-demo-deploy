@@ -18,7 +18,7 @@ export const useLeads = () => {
     if (leadsQuery.isError) {
       toast.info('¡Hubo un error al obtener los usuarios!');
     }
-  }, [leadsQuery.isError]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [leadsQuery.isError]);
 
   return {
     ...leadsQuery,

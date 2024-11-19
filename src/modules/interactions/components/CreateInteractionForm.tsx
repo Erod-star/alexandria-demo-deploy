@@ -59,7 +59,7 @@ export const CreateInteractionForm = ({
   const navigate = useNavigate();
 
   const { createMutation } = useInteractionMutations();
-  const { setItem } = useLocalStorage();
+  const { setItem, getItem, removeItem } = useLocalStorage();
 
   const form = useForm<z.infer<typeof contactFormSchema>>({
     resolver: zodResolver(contactFormSchema),
@@ -73,7 +73,8 @@ export const CreateInteractionForm = ({
 
   const handleSubmit = async (formData: z.infer<typeof contactFormSchema>) => {
     const interactionDate = new Date();
-    const timeElapsed = localStorage.getItem(LocalStorageKeys.TIMER_START);
+
+    const timeElapsed = getItem(LocalStorageKeys.TIMER_START);
     const interactionDuration = Math.floor(
       (Date.now() - Number(timeElapsed || 0)) / 1000
     );
@@ -90,7 +91,7 @@ export const CreateInteractionForm = ({
         leadId: leadId || 'No lead id!',
         userId: userId || 'No user id!',
       });
-      localStorage.removeItem(LocalStorageKeys.TIMER_START);
+      removeItem(LocalStorageKeys.TIMER_START);
       navigate('/publicaciones');
     } catch (error) {
       console.error('::Contact form', error);
@@ -98,7 +99,7 @@ export const CreateInteractionForm = ({
   };
 
   useEffect(() => {
-    const storedStartTime = localStorage.getItem(LocalStorageKeys.TIMER_START);
+    const storedStartTime = getItem(LocalStorageKeys.TIMER_START);
     const currentTime = Date.now();
 
     let startTime: number;

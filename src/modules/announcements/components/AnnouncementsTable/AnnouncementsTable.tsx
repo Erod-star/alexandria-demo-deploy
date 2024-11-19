@@ -80,7 +80,7 @@ export function AnnouncementsTable<TData extends LeadData, TValue>({
               .getColumn('inventory.calleYNumero')
               ?.getFilterValue() as string) ?? ''
           }
-          onChange={(event) => {
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
             const column = table.getColumn('inventory.calleYNumero');
             column?.setFilterValue(event.target.value);
           }}

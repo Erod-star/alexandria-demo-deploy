@@ -80,7 +80,7 @@ export function InventoryTable<TData, TValue>({
           value={
             (table.getColumn('calleYNumero')?.getFilterValue() as string) ?? ''
           }
-          onChange={(event) =>
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
             table.getColumn('calleYNumero')?.setFilterValue(event.target.value)
           }
         />

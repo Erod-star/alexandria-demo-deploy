@@ -69,7 +69,7 @@ export function UsersTable<TData, TValue>({
           className="w-full md:max-w-[50rem] bg-alt-gray-600 border-gray-400"
           placeholder="Buscar por nombre..."
           value={(table.getColumn('detalle')?.getFilterValue() as string) ?? ''}
-          onChange={(event) => {
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
             return table
               .getColumn('detalle')
               ?.setFilterValue(event.target.value);

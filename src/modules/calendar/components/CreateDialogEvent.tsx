@@ -1,20 +1,12 @@
 /*
-TODOS:
-  Cosas para terminar el modulo por ahorita:
-    - Añadir un handler para cuando no se un usuario con oAuth
-    - Añadir un botón para eliminar un evento y hacer la integracion con la API de Google
-    - Añadir un botón para editar un evento y hacer la integracion con la API de Google (Este aun no se xd)
-    - Ver si puedo añadir más campos a la creación del evento (participantes, locaciones, etc)
-    - Mostrar los eventos medio bonitos
-
-  Cosas para despues:
-    - Conectar el modulo de inventario con el backend
-    - Haceer el fetch por mes de los eventos y revalidar las queries por mes cuando se cree/elimine un evento
+TODO:
+  - Haceer el fetch por mes de los eventos y revalidar las queries por mes cuando se cree/elimine un evento
 */
 
 import * as z from 'zod';
 import { format } from 'date-fns';
 import { cn, setTimeToADate } from '@/lib/utils';
+import { es } from 'date-fns/locale';
 
 // ? Icons
 import { CalendarIcon, CalendarPlus } from 'lucide-react';
@@ -137,9 +129,9 @@ export const CreateDialogEvent = ({ disabled }: CreateDialogEventProps) => {
                             )}
                           >
                             {field.value ? (
-                              format(field.value, 'dd/MM/yyyy')
+                              format(field.value, 'PPP', { locale: es })
                             ) : (
-                              <span>Pick a date</span>
+                              <span>Selecciona una fecha</span>
                             )}
                             <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                           </Button>

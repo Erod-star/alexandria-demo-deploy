@@ -1,6 +1,7 @@
 import { format } from 'date-fns';
 import { cn, setTimeToADate } from '@/lib/utils';
 import * as z from 'zod';
+import { es } from 'date-fns/locale';
 
 // ? Icons
 import { CalendarIcon, X as Equis } from 'lucide-react';
@@ -147,9 +148,9 @@ export const ModifyEventDialog = () => {
                               )}
                             >
                               {field.value ? (
-                                format(field.value, 'dd/MM/yyyy')
+                                format(field.value, 'PPP', { locale: es })
                               ) : (
-                                <span>Pick a date</span>
+                                <span>Selecciona una fecha</span>
                               )}
                               <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                             </Button>

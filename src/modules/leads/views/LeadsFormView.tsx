@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import { format } from 'date-fns';
+import { es } from 'date-fns/locale';
 
 // ? Utils
 import { cn } from '@/lib/utils';
@@ -225,9 +226,9 @@ const LeadsFormView = () => {
                               )}
                             >
                               {field.value ? (
-                                format(field.value, 'PPP')
+                                format(field.value, 'PPP', { locale: es })
                               ) : (
-                                <span>Pick a date</span>
+                                <span>Selecciona una fecha</span>
                               )}
                               <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                             </Button>

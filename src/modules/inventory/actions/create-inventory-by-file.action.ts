@@ -24,6 +24,7 @@ export const createInventoryByFile = async (
     );
     return data;
   } catch (error) {
+    console.error('::Inventory', error);
     throw new Error('⚠️ Error al crear el inventario por medio de un archivo');
   }
 };

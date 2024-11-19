@@ -2,18 +2,26 @@ import { useEffect } from 'react';
 import { RouterProvider } from 'react-router-dom';
 import { withAuthInfo, WithAuthInfoProps } from '@propelauth/react';
 
+// ? Hooks
+import { useLocalStorage } from './hooks';
+
 // ? Routes
 import { router } from '@/routes';
 
 // ? Components
 import { Toaster } from '@/components';
 
+// ? Types
+import { LocalStorageKeys } from './types/global';
+
 const App = withAuthInfo((props: WithAuthInfoProps) => {
+  const { setItem } = useLocalStorage();
+
   useEffect(() => {
     if (props.accessToken) {
-      localStorage.setItem('auth-token', props.accessToken);
+      setItem(LocalStorageKeys.AUTH_TOKEN, props.accessToken);
     }
-  }, [props]);
+  }, [props]); //eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <>

@@ -1,40 +1,23 @@
-import { toast } from 'sonner';
 import { ColumnDef, FilterFn, Row } from '@tanstack/react-table';
 
 // ? Icons
-import {
-  House,
-  MoreHorizontal,
-  Building2,
-  ArrowUpDown,
-  MapPin,
-} from 'lucide-react';
+import { House, Building2, ArrowUpDown, MapPin } from 'lucide-react';
+
+// ? Utils
+import { copyToClipboard, formatToMxn } from '@/lib/utils';
 
 // ? Components
 import { HandleImages } from '../HandleImages';
-import {
-  Badge,
-  Button,
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components';
-
-// ? Hooks
-import { useInventoryMutations } from '../../hooks';
-
-// ? Helpers
-import { formatToMxn } from '@/helpers';
+import { Badge, Button } from '@/components';
+import { ActionsCell } from './ActionsCell';
 
 // ? Types
-import { Inventory } from '../../types';
+import type { Inventory } from '../../types';
 
 const customFilterFn: FilterFn<Inventory> = (
   row: Row<Inventory>,
   _: string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   filterValue: any
 ) => {
   filterValue = filterValue.toLowerCase();
@@ -53,6 +36,7 @@ const customFilterFn: FilterFn<Inventory> = (
 const detalleFilterFn: FilterFn<Inventory> = (
   row: Row<Inventory>,
   _: string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   filterValue: any
 ) => {
   if (filterValue === null) return true;
@@ -126,9 +110,9 @@ export const inventoryColumns: ColumnDef<Inventory>[] = [
                 className="px-2 py-0 h-6"
                 variant="ghost"
                 onClick={() => {
-                  navigator.clipboard.writeText(property.googleMaps!);
-                  toast('Ubicación copiada en el protapapeles', {
-                    duration: 1500,
+                  copyToClipboard({
+                    value: property.googleMaps!,
+                    message: 'Ubicación copiada en el protapapeles',
                   });
                 }}
               >
@@ -137,16 +121,16 @@ export const inventoryColumns: ColumnDef<Inventory>[] = [
             )}
 
             <Button
-              className="p-0 h-6 text-gray-300 max-w-[16rem] flex justify-start hover:text-alt-green-300"
+              className="p-0 h-6 text-gray-300 max-w-[16rem] flex justify-start overflow-hidden hover:text-alt-green-300"
               variant="link"
               onClick={() => {
-                navigator.clipboard.writeText(fullAddress);
-                toast('Dirección copiada en el portapapeles', {
-                  duration: 1500,
+                copyToClipboard({
+                  value: fullAddress,
+                  message: 'Dirección copiada en el portapapeles',
                 });
               }}
             >
-              <p className="overflow-hidden truncate">{fullAddress}</p>
+              <p className="truncate">{fullAddress}</p>
             </Button>
           </div>
         </div>
@@ -191,7 +175,7 @@ export const inventoryColumns: ColumnDef<Inventory>[] = [
       const property = row.original;
       return (
         <div className="flex-center">
-          <Badge variant="altaltium">{property.etapa}</Badge>
+          <Badge variant="altaltium">{property.etapa || 'Sin etapa'}</Badge>
         </div>
       );
     },
@@ -255,37 +239,6 @@ export const inventoryColumns: ColumnDef<Inventory>[] = [
   {
     id: 'acciones',
     header: () => <div className="flex-center">Acciones</div>,
-    cell: ({ row }) => {
-      const { deleteMutation } = useInventoryMutations();
-
-      const handleDelete = () => {
-        const { inventoryId } = row.original;
-        deleteMutation.mutateAsync(inventoryId);
-      };
-
-      return (
-        <div className="px-2 flex-center">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button className="h-8 w-8 p-0">
-                <span className="sr-only">Open menu</span>
-                <MoreHorizontal className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Acciones</DropdownMenuLabel>
-              <DropdownMenuItem>Publicar</DropdownMenuItem>
-              <DropdownMenuItem onClick={handleDelete}>
-                Eliminar
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuLabel>Solicitar a marketing</DropdownMenuLabel>
-              <DropdownMenuItem>Imagenes</DropdownMenuItem>
-              <DropdownMenuItem>Fichas</DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-      );
-    },
+    cell: ({ row }) => <ActionsCell inventoryId={row.original.inventoryId} />,
   },
 ];

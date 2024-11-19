@@ -18,7 +18,6 @@ const [{ PROPELAUTH_AUTH_URL }, { hasError, missingVariables }] =
   getEnvVariables();
 
 if (missingVariables.length > 0) {
-  // eslint-disable-next-line no-console
   console.error('::Warning, missing env variables:', missingVariables);
 }
 

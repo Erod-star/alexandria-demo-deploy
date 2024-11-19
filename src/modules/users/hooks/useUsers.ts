@@ -19,7 +19,7 @@ export const useUsers = () => {
     if (usersQuery.isError) {
       toast.error('¡Hubo un error al obtener los usuarios!');
     }
-  }, [usersQuery.isError]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [usersQuery.isError]);
 
   return {
     ...usersQuery,

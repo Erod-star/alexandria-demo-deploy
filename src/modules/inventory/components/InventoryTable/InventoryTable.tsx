@@ -275,7 +275,7 @@ export function InventoryTable<TData, TValue>({
       </div>
 
       <div className="rounded-md border border-alt-green-900 bg-alt-gray-600">
-        <div className="relative w-full overflow-auto">
+        <div className="relative w-full">
           <Table className="border-b-8 border-alt-green-900">
             <TableHeader>
               {table.getHeaderGroups().map((headerGroup) => (

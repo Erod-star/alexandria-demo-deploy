@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
@@ -12,25 +12,21 @@ export const useEvents = () => {
   // TODO: Hacer la query por mes
   const eventsQuery = useQuery({
     queryKey: ['events'],
-    queryFn: () => getGoogleEvents(),
+    queryFn: getGoogleEvents,
     staleTime: 1000 * 60 * 5,
   });
 
   const events = eventsQuery.data?.items ?? [];
 
-  const parsedEvents: AltaltiumEvent[] = useMemo(
-    () =>
-      events.map((event) => {
-        const summary = event.summary.replace('Altaltium - ', '');
-        return {
-          title: summary,
-          start: new Date(event.start.dateTime),
-          end: new Date(event.end.dateTime),
-          googleData: { ...event, summary },
-        };
-      }),
-    [events]
-  );
+  const parsedEvents: AltaltiumEvent[] = events.map((event) => {
+    const summary = event.summary.replace('Altaltium - ', '');
+    return {
+      title: summary,
+      start: new Date(event.start.dateTime),
+      end: new Date(event.end.dateTime),
+      googleData: { ...event, summary },
+    };
+  });
 
   useEffect(() => {
     if (eventsQuery.isError) {

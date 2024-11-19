@@ -56,7 +56,7 @@ const CalendarView = withAuthInfo(({ user }: WithAuthInfoProps) => {
         localStorage.removeItem('provider-token');
       }
     };
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <Card className="flex-grow h-full border-none">

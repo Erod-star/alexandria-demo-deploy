@@ -17,6 +17,7 @@ export const editUser = async (payload: User): Promise<PatchUserResponse> => {
     );
     return data;
   } catch (error) {
+    console.error('::Users', error);
     throw new Error('⚠️ Error editando el usuario');
   }
 };

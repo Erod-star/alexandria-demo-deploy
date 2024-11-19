@@ -10,15 +10,17 @@ import RootLayout from '@/layouts/RootLayout';
 
 // ? === Views ===
 
+// Announcements
+import AnnouncementsView from '@/modules/announcements/views/AnnouncementsView';
+import CreateAnnouncementView from '@/modules/announcements/views/CreateAnnouncementView';
+import ContactView from '@/modules/interactions/views/ContactView';
+
 // Calendar
 import CalendarView from '@/modules/calendar/views/CalendarView';
 
 // Inventory
 import InventoryView from '@/modules/inventory/views/InventoryView';
 import CreateInventoryView from '@/modules/inventory/views/CreateInventoryView';
-
-// Publications
-import PublicationsView from '@/modules/publications/views/PublicationsView';
 
 // Requests
 import RequestsView from '@/modules/requests/views/RequestsView';
@@ -50,7 +52,9 @@ export const router = createBrowserRouter(
         </Route>
 
         <Route path="publicaciones">
-          <Route index element={<PublicationsView />} />
+          <Route index element={<AnnouncementsView />} />
+          <Route path="nueva/:id" element={<CreateAnnouncementView />} />
+          <Route path="contact/:leadId" element={<ContactView />} />
         </Route>
 
         <Route path="peticiones">

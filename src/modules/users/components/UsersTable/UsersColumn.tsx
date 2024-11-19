@@ -1,25 +1,21 @@
-import { useNavigate } from 'react-router-dom';
 import { ColumnDef } from '@tanstack/react-table';
-import { toast } from 'sonner';
+
+// ? Utils
+import { copyToClipboard } from '@/lib/utils';
 
 // ? Icons
-import { ArrowUpDown, Mail, MoreHorizontal, Phone } from 'lucide-react';
+import { ArrowUpDown, Mail, Phone } from 'lucide-react';
 
 // ? Components
+import { Rewards, Rating } from '@/modules/users/components';
+import { ActionsCell } from './ActionsCell';
 import {
   Avatar,
   AvatarFallback,
   AvatarImage,
   Badge,
   Button,
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuTrigger,
 } from '@/components';
-
-import { Rewards, Rating } from '@/modules/users/components';
 
 // ? Types
 import type { Row, FilterFn } from '@tanstack/react-table';
@@ -28,6 +24,7 @@ import type { User } from '@/modules/users/types';
 const customFilterFn: FilterFn<User> = (
   row: Row<User>,
   _: string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   filterValue: any
 ) => {
   filterValue = filterValue.toLowerCase();
@@ -93,9 +90,9 @@ export const usersColumns: ColumnDef<User>[] = [
               size="sm"
               variant="link"
               onClick={() => {
-                navigator.clipboard.writeText(correoPersonal);
-                toast('Correo copiado en el portapapeles', {
-                  duration: 1500,
+                copyToClipboard({
+                  value: correoPersonal,
+                  message: 'Correo copiado en el portapapeles',
                 });
               }}
             >
@@ -108,9 +105,9 @@ export const usersColumns: ColumnDef<User>[] = [
               size="sm"
               variant="link"
               onClick={() => {
-                navigator.clipboard.writeText(telefono);
-                toast('Teléfono copiado en el portapapeles', {
-                  duration: 1500,
+                copyToClipboard({
+                  value: telefono,
+                  message: 'Teléfono copiado en el portapapeles',
                 });
               }}
             >
@@ -144,26 +141,6 @@ export const usersColumns: ColumnDef<User>[] = [
   {
     id: 'acciones',
     header: 'Acciones',
-    cell: ({ row }) => {
-      const { userId } = row.original;
-      const navigate = useNavigate();
-
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Acciones</DropdownMenuLabel>
-            <DropdownMenuItem onClick={() => navigate(`editar/${userId}`)}>
-              Editar
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
-    },
+    cell: ({ row }) => <ActionsCell userId={row.original.userId} />,
   },
 ];

@@ -15,6 +15,7 @@ export const getInventories = async (): Promise<GetInventoriesResponse> => {
     );
     return data;
   } catch (error) {
+    console.error('::Inventory', error);
     throw new Error('⚠️ Error obteniendo inventarios');
   }
 };

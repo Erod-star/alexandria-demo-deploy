@@ -13,7 +13,7 @@ const CreateInventoryView = () => {
 
   useEffect(() => {
     resetInventoryWizard();
-  }, []);
+  }, []); //eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <Card className="relative w-full h-full border-none">

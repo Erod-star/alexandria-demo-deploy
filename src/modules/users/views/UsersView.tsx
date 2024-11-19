@@ -20,7 +20,7 @@ function UsersView() {
 
   return (
     <div className="flex h-full">
-      <Card className="flex-grow h-full border-none overflow-x-scroll">
+      <Card className="flex-grow h-full border-none">
         <CardHeader className="flex-row items-center justify-between">
           <CardTitle>Usuarios</CardTitle>
 
@@ -32,7 +32,7 @@ function UsersView() {
           </Button>
         </CardHeader>
 
-        <CardContent className="w-screen md:w-auto md:overflow-scroll">
+        <CardContent className="w-screen md:w-auto">
           {isLoading ? (
             <TableSkeleton amountOfFilters={1} />
           ) : (

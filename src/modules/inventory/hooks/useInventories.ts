@@ -18,7 +18,7 @@ export const useInventories = () => {
     if (inventoriesQuery.isError) {
       toast.info('¡Hubo un error al obtener los usuarios!');
     }
-  }, [inventoriesQuery.isError]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [inventoriesQuery.isError]);
 
   return {
     ...inventoriesQuery,

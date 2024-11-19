@@ -24,18 +24,21 @@ import {
   LoadingSpinner,
 } from '@/components';
 
+// ? Hooks
+import { useLocalStorage } from '@/hooks';
+
 export const UserDropdownMenu = withAuthInfo(({ user }: WithAuthInfoProps) => {
   const logout = useLogoutFunction();
   const { getAccountPageUrl } = useHostedPageUrls();
+
+  const { clearAllItems } = useLocalStorage();
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleLogout = () => {
     if (!isLoading) {
       setIsLoading(true);
-      localStorage.removeItem('auth-token');
-      localStorage.removeItem('provider-token');
-      localStorage.removeItem('needs-provider-token');
+      clearAllItems();
       logout(true);
     }
   };

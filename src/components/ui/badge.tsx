@@ -25,7 +25,7 @@ const badgeVariants = cva(
         base: '',
         // ? Departments
         altaltium:
-          'bg-alt-green-300 text-black border-alt-green-600 shadow-sm px-3 py-1',
+          'bg-alt-green-300 text-black border-none px-3 py-1 shadow-md shadow-slate-700/45',
       },
     },
     defaultVariants: {

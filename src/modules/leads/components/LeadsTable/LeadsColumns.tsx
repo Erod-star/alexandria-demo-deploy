@@ -1,33 +1,48 @@
 import { ColumnDef } from '@tanstack/react-table';
-import { toast } from 'sonner';
+import { format } from 'date-fns';
+import { es } from 'date-fns/locale';
+
+// ? Icons
+import { Building2, Mail, MoreHorizontal, Phone } from 'lucide-react';
 
 // ? Components
-import { Badge, Button } from '@/components';
+import {
+  Badge,
+  Button,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
+} from '@/components';
 
 // ? Types
-import type { Lead } from '../../interfaces';
-import { Mail, Phone } from 'lucide-react';
+import type { Lead } from '../../types';
+import { copyToClipboard } from '@/lib/utils';
 
 export const leadsColumns: ColumnDef<Lead>[] = [
   {
     accessorKey: 'name',
     header: 'Lead',
-    cell: ({ row }) => {
-      const { name, since } = row.original;
-      return (
-        <>
-          <p className="font-semibold text-2xl">{name}</p>
-          <span className="text-sm text-alt-green-300">Lead desde {since}</span>
-        </>
-      );
-    },
+    cell: ({ row }) => (
+      <>
+        <p className="font-semibold text-2xl">{row.original.nombre}</p>
+        {row.original.createdAt && (
+          <span className="text-sm text-alt-green-300">
+            Lead desde el{' '}
+            {format(row.original.createdAt, 'PPP', { locale: es })}
+          </span>
+        )}
+      </>
+    ),
   },
   {
     id: 'contact',
     accessorKey: 'email',
     header: 'Contacto',
     cell: ({ row }) => {
-      const { email } = row.original;
+      const { correo, telefono } = row.original;
+
       return (
         <div className="mt-1">
           <Button
@@ -35,14 +50,14 @@ export const leadsColumns: ColumnDef<Lead>[] = [
             size="sm"
             variant="link"
             onClick={() => {
-              navigator.clipboard.writeText(email);
-              toast.info('Correo copiado en el portapapeles', {
-                duration: 1500,
+              copyToClipboard({
+                value: 'email',
+                message: 'Correo copiado en el portapapeles',
               });
             }}
           >
             <Mail className="size-4 inline-block" />
-            <span className="text-sm">{email}</span>
+            <span className="text-sm">{correo}</span>
           </Button>
 
           <Button
@@ -50,14 +65,14 @@ export const leadsColumns: ColumnDef<Lead>[] = [
             size="sm"
             variant="link"
             onClick={() => {
-              navigator.clipboard.writeText('312 133 5555');
-              toast.info('Teléfono copiado en el portapapeles', {
-                duration: 1500,
+              copyToClipboard({
+                value: telefono,
+                message: 'Teléfono copiado en el portapapeles',
               });
             }}
           >
             <Phone className="size-4 inline-block" />
-            <span className="text-sm">312 133 5555</span>
+            <span className="text-sm">{telefono}</span>
           </Button>
         </div>
       );
@@ -66,30 +81,61 @@ export const leadsColumns: ColumnDef<Lead>[] = [
   {
     accessorKey: 'reason',
     header: 'Motivo',
-    cell: ({ row }) => {
-      const { reason } = row.original;
-      return (
-        <Badge className="bg-alt-green-300 text-alt-green-900">{reason}</Badge>
-      );
-    },
+    cell: ({ row }) => (
+      <Badge className="bg-alt-green-300 text-alt-green-900">
+        {row.original.tipoAnuncio}
+      </Badge>
+    ),
   },
   {
     id: 'properties',
     accessorKey: 'properties',
-    header: 'Propiedades',
+    header: () => <div className="text-center">Propiedades</div>,
     cell: ({ row }) => {
-      const lead = row.original;
-      if (lead.properties.length === 0) {
-        return <p>Sin propiedades</p>;
-      }
-      return <Button>{lead.properties.length} Propiedades</Button>;
+      const { announcements } = row.original;
+      const hasAnnouncements = announcements && announcements.length > 0;
+      return (
+        <div className="flex-center">
+          <Button
+            disabled={!hasAnnouncements}
+            size="icon"
+            className="relative"
+            onClick={() => row.toggleExpanded()}
+          >
+            <Building2 />
+            {hasAnnouncements && (
+              <div className="size-5 bg-red-600 text-white shadow-xl flex-center rounded-full absolute -top-2 -right-2">
+                <p className="text-[0.7rem] font-semibold">
+                  {announcements.length}
+                </p>
+              </div>
+            )}
+          </Button>
+        </div>
+      );
     },
   },
   {
-    id: 'actions',
-    header: 'Acciones',
+    id: 'acciones',
+    header: () => <div className="flex-center">Acciones</div>,
     cell: () => {
-      <Button>+</Button>;
+      return (
+        <div className="px-2 flex-center">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button className="h-8 w-8 p-0">
+                <span className="sr-only">Open menu</span>
+                <MoreHorizontal className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Acciones</DropdownMenuLabel>
+              <DropdownMenuItem>Editar</DropdownMenuItem>
+              <DropdownMenuItem>Eliminar</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      );
     },
   },
 ];

@@ -1,6 +1,5 @@
 import { useNavigate } from 'react-router-dom';
 import { ColumnDef, FilterFn, Row } from '@tanstack/react-table';
-import { toast } from 'sonner';
 
 // ? Icons
 import {
@@ -10,6 +9,9 @@ import {
   ArrowUpDown,
   MapPin,
 } from 'lucide-react';
+
+// ? Utils
+import { copyToClipboard, formatToMxn } from '@/lib/utils';
 
 // ? Components
 import { HandleImages } from '../HandleImages';
@@ -26,9 +28,6 @@ import {
 
 // ? Hooks
 import { useInventoryMutations } from '../../hooks';
-
-// ? Utils
-import { formatToMxn } from '@/lib/utils';
 
 // ? Types
 import type { Inventory } from '../../types';
@@ -127,9 +126,9 @@ export const inventoryColumns: ColumnDef<Inventory>[] = [
                 className="px-2 py-0 h-6"
                 variant="ghost"
                 onClick={() => {
-                  navigator.clipboard.writeText(property.googleMaps!);
-                  toast('Ubicación copiada en el protapapeles', {
-                    duration: 1500,
+                  copyToClipboard({
+                    value: property.googleMaps!,
+                    message: 'Ubicación copiada en el protapapeles',
                   });
                 }}
               >
@@ -141,9 +140,9 @@ export const inventoryColumns: ColumnDef<Inventory>[] = [
               className="p-0 h-6 text-gray-300 max-w-[16rem] flex justify-start overflow-hidden hover:text-alt-green-300"
               variant="link"
               onClick={() => {
-                navigator.clipboard.writeText(fullAddress);
-                toast('Dirección copiada en el portapapeles', {
-                  duration: 1500,
+                copyToClipboard({
+                  value: fullAddress,
+                  message: 'Dirección copiada en el portapapeles',
                 });
               }}
             >

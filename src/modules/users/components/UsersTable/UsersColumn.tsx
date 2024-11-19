@@ -1,6 +1,8 @@
 import { useNavigate } from 'react-router-dom';
 import { ColumnDef } from '@tanstack/react-table';
-import { toast } from 'sonner';
+
+// ? Utils
+import { copyToClipboard } from '@/lib/utils';
 
 // ? Icons
 import { ArrowUpDown, Mail, MoreHorizontal, Phone } from 'lucide-react';
@@ -93,9 +95,9 @@ export const usersColumns: ColumnDef<User>[] = [
               size="sm"
               variant="link"
               onClick={() => {
-                navigator.clipboard.writeText(correoPersonal);
-                toast('Correo copiado en el portapapeles', {
-                  duration: 1500,
+                copyToClipboard({
+                  value: correoPersonal,
+                  message: 'Correo copiado en el portapapeles',
                 });
               }}
             >
@@ -108,9 +110,9 @@ export const usersColumns: ColumnDef<User>[] = [
               size="sm"
               variant="link"
               onClick={() => {
-                navigator.clipboard.writeText(telefono);
-                toast('Teléfono copiado en el portapapeles', {
-                  duration: 1500,
+                copyToClipboard({
+                  value: telefono,
+                  message: 'Teléfono copiado en el portapapeles',
                 });
               }}
             >

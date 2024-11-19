@@ -1,7 +1,9 @@
 import { ColumnDef } from '@tanstack/react-table';
-import { toast } from 'sonner';
 
 import type { FilterFn, Row } from '@tanstack/react-table';
+
+// ? Utils
+import { copyToClipboard } from '@/lib/utils';
 
 // ? Icons
 import { ArrowUpDown, Building2, House, Info, MapPin } from 'lucide-react';
@@ -94,9 +96,9 @@ export const announcementWithInventoriesColumns: ColumnDef<Announcement>[] = [
                 className="px-2 py-0 h-6"
                 variant="ghost"
                 onClick={() => {
-                  navigator.clipboard.writeText(property.googleMaps!);
-                  toast('Ubicación copiada en el protapapeles', {
-                    duration: 1500,
+                  copyToClipboard({
+                    value: property.googleMaps!,
+                    message: 'Ubicación copiada en el portapapeles',
                   });
                 }}
               >
@@ -108,9 +110,9 @@ export const announcementWithInventoriesColumns: ColumnDef<Announcement>[] = [
               className="p-0 h-6 text-gray-300 flex justify-start overflow-hidden hover:text-alt-green-300"
               variant="link"
               onClick={() => {
-                navigator.clipboard.writeText(fullAddress);
-                toast('Dirección copiada en el portapapeles', {
-                  duration: 1500,
+                copyToClipboard({
+                  value: fullAddress,
+                  message: 'Dirección copiada en el portapapeles',
                 });
               }}
             >

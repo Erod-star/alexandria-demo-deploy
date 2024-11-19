@@ -1,5 +1,4 @@
 import { ColumnDef } from '@tanstack/react-table';
-import { toast } from 'sonner';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 
@@ -19,6 +18,7 @@ import {
 
 // ? Types
 import type { Lead } from '../../types';
+import { copyToClipboard } from '@/lib/utils';
 
 export const leadsColumns: ColumnDef<Lead>[] = [
   {
@@ -50,9 +50,9 @@ export const leadsColumns: ColumnDef<Lead>[] = [
             size="sm"
             variant="link"
             onClick={() => {
-              navigator.clipboard.writeText('email');
-              toast.info('Correo copiado en el portapapeles', {
-                duration: 1500,
+              copyToClipboard({
+                value: 'email',
+                message: 'Correo copiado en el portapapeles',
               });
             }}
           >
@@ -65,9 +65,9 @@ export const leadsColumns: ColumnDef<Lead>[] = [
             size="sm"
             variant="link"
             onClick={() => {
-              navigator.clipboard.writeText(telefono);
-              toast.info('Teléfono copiado en el portapapeles', {
-                duration: 1500,
+              copyToClipboard({
+                value: telefono,
+                message: 'Teléfono copiado en el portapapeles',
               });
             }}
           >

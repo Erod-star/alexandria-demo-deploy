@@ -8,7 +8,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { toast } from 'sonner';
 
 // ? Utils
-import { cn } from '@/lib/utils';
+import { cn, copyToClipboard } from '@/lib/utils';
 
 // ? Icons
 import { Copy, Plus } from 'lucide-react';
@@ -78,10 +78,9 @@ export const CreateAnnouncementForm = ({
   };
 
   const handleCopyIdToClipboard = (field: AnnouncementResourceId): void => {
-    const currentId = form.getValues(field);
-    navigator.clipboard.writeText(currentId);
-    toast('Id copiado en el portapapeles', {
-      duration: 1500,
+    copyToClipboard({
+      value: form.getValues(field),
+      message: 'Id copiado en el portapapeles',
     });
   };
 

@@ -1,33 +1,15 @@
-import { useNavigate } from 'react-router-dom';
 import { ColumnDef, FilterFn, Row } from '@tanstack/react-table';
 
 // ? Icons
-import {
-  House,
-  MoreHorizontal,
-  Building2,
-  ArrowUpDown,
-  MapPin,
-} from 'lucide-react';
+import { House, Building2, ArrowUpDown, MapPin } from 'lucide-react';
 
 // ? Utils
 import { copyToClipboard, formatToMxn } from '@/lib/utils';
 
 // ? Components
 import { HandleImages } from '../HandleImages';
-import {
-  Badge,
-  Button,
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components';
-
-// ? Hooks
-import { useInventoryMutations } from '../../hooks';
+import { Badge, Button } from '@/components';
+import { ActionsCell } from './ActionsCell';
 
 // ? Types
 import type { Inventory } from '../../types';
@@ -257,42 +239,6 @@ export const inventoryColumns: ColumnDef<Inventory>[] = [
   {
     id: 'acciones',
     header: () => <div className="flex-center">Acciones</div>,
-    cell: ({ row }) => {
-      const navigate = useNavigate();
-      const { deleteMutation } = useInventoryMutations();
-
-      const { inventoryId } = row.original;
-      const handleDelete = () => {
-        deleteMutation.mutateAsync(inventoryId);
-      };
-
-      return (
-        <div className="px-2 flex-center">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button className="h-8 w-8 p-0">
-                <span className="sr-only">Open menu</span>
-                <MoreHorizontal className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Acciones</DropdownMenuLabel>
-              <DropdownMenuItem
-                onClick={() => navigate(`/publicaciones/nueva/${inventoryId}`)}
-              >
-                Publicar
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={handleDelete}>
-                Eliminar
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuLabel>Solicitar a marketing</DropdownMenuLabel>
-              <DropdownMenuItem>Imagenes</DropdownMenuItem>
-              <DropdownMenuItem>Fichas</DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-      );
-    },
+    cell: ({ row }) => <ActionsCell inventoryId={row.original.inventoryId} />,
   },
 ];

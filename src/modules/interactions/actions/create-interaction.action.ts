@@ -9,8 +9,8 @@ export interface CreateInteractionPayload {
   interactionDate: Date | string;
   interactionDuration: number;
   interactionStatus: boolean;
-  nextContactDate: Date | string;
   scheduledMeeting: boolean;
+  nextContactDate?: Date | string;
   meetingDate?: Date | string;
   userId: string;
   leadId: string;

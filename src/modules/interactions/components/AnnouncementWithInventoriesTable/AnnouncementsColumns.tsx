@@ -8,7 +8,13 @@ import { ArrowUpDown, Building2, House, Info, MapPin } from 'lucide-react';
 
 // ? Components
 import { HandleImages } from '@/modules/inventory/components';
-import { Button } from '@/components';
+import {
+  Button,
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components';
 
 // ? Types
 import type { Announcement } from '@/modules/announcements/types';
@@ -161,14 +167,23 @@ export const announcementWithInventoriesColumns: ColumnDef<Announcement>[] = [
       const { inventory } = row.original;
       return (
         <div className="flex-center">
-          <Button
-            disabled={!inventory}
-            size="icon"
-            className="relative"
-            onClick={() => row.toggleExpanded()}
-          >
-            <Info />
-          </Button>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  disabled={!inventory}
+                  size="icon"
+                  className="relative"
+                  onClick={() => row.toggleExpanded()}
+                >
+                  <Info />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Detalles de la propiedad</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </div>
       );
     },

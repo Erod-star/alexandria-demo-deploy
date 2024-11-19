@@ -3,9 +3,12 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import { format } from 'date-fns';
+import { es } from 'date-fns/locale';
+
+import { toast } from 'sonner';
 
 // ? Icons
-import { CalendarIcon } from 'lucide-react';
+import { CalendarIcon, CalendarPlus } from 'lucide-react';
 
 // ? Utils
 import { cn } from '@/lib/utils';
@@ -20,11 +23,13 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
+  LoadingSpinner,
   Popover,
   PopoverContent,
   PopoverTrigger,
   RadioGroup,
   RadioGroupItem,
+  Separator,
   Textarea,
 } from '@/components';
 
@@ -33,6 +38,12 @@ import { useInteractionMutations } from '../hooks';
 
 // ? Schema
 import { contactFormSchema } from '../schema';
+import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useLocalStorage } from '@/hooks';
+
+// ? Types
+import { LocalStorageKeys } from '@/types/global';
 
 interface CreateInteractionFormProps {
   className?: string;
@@ -45,31 +56,59 @@ export const CreateInteractionForm = ({
   leadId,
   userId,
 }: CreateInteractionFormProps) => {
+  const navigate = useNavigate();
+
   const { createMutation } = useInteractionMutations();
+  const { setItem } = useLocalStorage();
 
   const form = useForm<z.infer<typeof contactFormSchema>>({
     resolver: zodResolver(contactFormSchema),
     defaultValues: {
       interactionNotes: '',
-      interactionDate: new Date(),
       interactionStatus: 'no',
-      nextContactDate: new Date(),
     },
   });
 
-  const handleSubmit = (formData: z.infer<typeof contactFormSchema>) => {
-    console.log('::formData', formData);
+  const itHadContact = form.watch('interactionStatus');
 
-    createMutation.mutateAsync({
-      ...formData,
-      scheduledMeeting: false,
-      interactionStatus: formData.interactionStatus === 'si',
-      interactionDuration: 0,
-      leadId: leadId || 'No lead id!',
-      userId: userId || 'No user id!',
-    });
+  const handleSubmit = async (formData: z.infer<typeof contactFormSchema>) => {
+    const interactionDate = new Date();
+    const timeElapsed = localStorage.getItem(LocalStorageKeys.TIMER_START);
+    const interactionDuration = Math.floor(
+      (Date.now() - Number(timeElapsed || 0)) / 1000
+    );
+
+    try {
+      // TODO: Agendar primero la llamada en google y esperar a que salga bien antes de que se mande la solicitud a nuestro backend
+      await createMutation.mutateAsync({
+        ...formData,
+        interactionDate,
+        interactionDuration,
+        scheduledMeeting: false,
+        interactionStatus: formData.interactionStatus === 'si',
+        nextContactDate: new Date(),
+        leadId: leadId || 'No lead id!',
+        userId: userId || 'No user id!',
+      });
+      localStorage.removeItem(LocalStorageKeys.TIMER_START);
+      navigate('/publicaciones');
+    } catch (error) {
+      console.error('::Contact form', error);
+    }
   };
 
+  useEffect(() => {
+    const storedStartTime = localStorage.getItem(LocalStorageKeys.TIMER_START);
+    const currentTime = Date.now();
+
+    let startTime: number;
+    if (storedStartTime) {
+      startTime = parseInt(storedStartTime, 10);
+    } else {
+      startTime = currentTime;
+      setItem(LocalStorageKeys.TIMER_START, startTime.toString());
+    }
+  }, []);
   return (
     <div className={cn('', className)}>
       <h3 className="text-2xl text-alt-green-300 font-semibold">
@@ -137,92 +176,87 @@ export const CreateInteractionForm = ({
             />
           </div>
 
-          <FormField
-            control={form.control}
-            name="interactionDate"
-            render={({ field }) => (
-              <FormItem className="form-required-field flex flex-col">
-                <FormLabel>Fecha de contacto</FormLabel>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <FormControl>
-                      <Button
-                        variant="outline"
-                        className={cn(
-                          'pl-3 text-left font-normal',
-                          !field.value && 'text-muted-foreground'
-                        )}
-                      >
-                        {field.value ? (
-                          format(field.value, 'PPP')
-                        ) : (
-                          <span>Pick a date</span>
-                        )}
-                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                      </Button>
-                    </FormControl>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
-                    <Calendar
-                      mode="single"
-                      selected={field.value}
-                      onSelect={field.onChange}
-                      disabled={(date) =>
-                        date > new Date() || date < new Date('1900-01-01')
-                      }
-                      initialFocus
-                    />
-                  </PopoverContent>
-                </Popover>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          {itHadContact === 'si' && (
+            <>
+              <h3
+                className="form-subtitle pt-4 text-2xl font-medium tracking-tight col-span-2"
+                data-testid="form-subtitle"
+              >
+                Contacto a futuro
+              </h3>
+              <Separator className="col-span-2" />
 
-          <FormField
-            control={form.control}
-            name="nextContactDate"
-            render={({ field }) => (
-              <FormItem className="form-required-field flex flex-col">
-                <FormLabel>Fecha de próximo contacto</FormLabel>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <FormControl>
-                      <Button
-                        variant="outline"
-                        className={cn(
-                          'pl-3 text-left font-normal',
-                          !field.value && 'text-muted-foreground'
-                        )}
-                      >
-                        {field.value ? (
-                          format(field.value, 'PPP')
-                        ) : (
-                          <span>Pick a date</span>
-                        )}
-                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                      </Button>
-                    </FormControl>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
-                    <Calendar
-                      mode="single"
-                      selected={field.value}
-                      onSelect={field.onChange}
-                      disabled={(date) =>
-                        date > new Date() || date < new Date('1900-01-01')
-                      }
-                      initialFocus
-                    />
-                  </PopoverContent>
-                </Popover>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+              <div className="col-span-2 space-y-4">
+                <FormField
+                  control={form.control}
+                  name="nextContactDate"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-col w-1/2">
+                      <FormLabel>Fecha de próximo contacto</FormLabel>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <FormControl>
+                            <Button
+                              variant="outline"
+                              className={cn(
+                                'pl-3 text-left font-normal',
+                                !field.value && 'text-muted-foreground'
+                              )}
+                            >
+                              {field.value ? (
+                                format(field.value, 'PPP', { locale: es })
+                              ) : (
+                                <span>Selecciona una fecha</span>
+                              )}
+                              <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                            </Button>
+                          </FormControl>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0" align="start">
+                          <Calendar
+                            mode="single"
+                            initialFocus
+                            lang="es"
+                            // TODO: Añadir validación que, al establecer una fecha por google marcar este campo como requerido
+                            required={false}
+                            selected={field.value}
+                            onSelect={field.onChange}
+                            disabled={(date) =>
+                              date > new Date() || date < new Date('1900-01-01')
+                            }
+                          />
+                        </PopoverContent>
+                      </Popover>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <Button
+                  className="gap-3"
+                  type="button"
+                  onClick={() =>
+                    toast.info('¡Esta funcionalidad aún no está disponible!')
+                  }
+                >
+                  Agendar llamada <CalendarPlus className="size-5" />
+                </Button>
+              </div>
+            </>
+          )}
 
           <div className="flex justify-end col-span-2">
-            <Button type="submit">Finalizar contacto</Button>
+            <Button
+              className="min-w-28"
+              disabled={createMutation.isPending}
+              type="submit"
+            >
+              {createMutation.isPending ? (
+                <LoadingSpinner className="size-4" />
+              ) : (
+                'Finalizar contacto'
+              )}
+            </Button>
           </div>
         </form>
       </Form>

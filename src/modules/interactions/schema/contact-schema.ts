@@ -12,8 +12,6 @@ export const contactFormSchema = z.object({
   interactionStatus: z.enum(['si', 'no'], {
     required_error: 'Debes seleccionar una opción',
   }),
-  interactionDate: z.date(),
-  nextContactDate: z.date(),
-  scheduledMeeting: z.boolean().default(false).optional(),
+  nextContactDate: z.date().optional(),
   meetingDate: z.string().min(2).or(z.string().length(0)).optional(),
 });

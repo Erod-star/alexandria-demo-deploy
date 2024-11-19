@@ -29,7 +29,7 @@ import {
 } from '@/components';
 
 // ? Types
-import { Lead } from '@/modules/leads/types';
+import type { Lead } from '@/modules/leads/types';
 
 interface LeadData {
   leads: Lead[];
@@ -144,7 +144,7 @@ export function AnnouncementsTable<TData extends LeadData, TValue>({
                     colSpan={columns.length}
                     className="h-24 text-center"
                   >
-                    No results.
+                    Sin resultados.
                   </TableCell>
                 </TableRow>
               )}

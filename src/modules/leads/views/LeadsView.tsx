@@ -37,7 +37,7 @@ function LeadsView() {
           {isLoading ? (
             <TableSkeleton amountOfFilters={0} />
           ) : (
-            <LeadsTable columns={leadsColumns} data={leads} />
+            <LeadsTable data={leads as any} columns={leadsColumns as any} />
           )}
         </CardContent>
       </Card>

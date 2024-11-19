@@ -12,4 +12,7 @@ export interface Lead {
   idAnuncio: string;
   announcementId?: string;
   announcements?: Announcement[];
+  createdAt?: string | Date | null;
+  updatedAt?: string | Date | null;
+  deletedAt?: string | Date | null;
 }
